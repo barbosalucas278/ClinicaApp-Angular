@@ -1,0 +1,565 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="row justify-content-center">
+        <img src="{{ urlImgRegisterEmpresa }}" class="img-fluid col-2" />
+      </div>
+    </div>
+    <div class="row justify-content-araound mb-3 fs-5">
+      <div class="col-4 me-4"></div>
+      <div class="form-check form-check-inline col-2">
+        <input
+          (click)="resetFormulario()"
+          class="form-check-input"
+          type="radio"
+          name="tipoUsuario"
+          id="pacienteCheck"
+          [(ngModel)]="tipoUsuario"
+          value="paciente"
+          checked
+        />
+        <label class="form-check-label" for="inlineRadio1">Paciente</label>
+      </div>
+      <div class="form-check form-check-inline col-2 ms-3">
+        <input
+          (click)="resetFormulario()"
+          class="form-check-input"
+          type="radio"
+          name="tipoUsuario"
+          id="especialista"
+          value="especialista"
+          [(ngModel)]="tipoUsuario"
+        />
+        <label class="form-check-label" for="inlineRadio2">Especialista</label>
+      </div>
+    </div>
+    <form
+      [formGroup]="formularioPaciente"
+      (ngSubmit)="onSubmit()"
+      *ngIf="tipoUsuario == 'paciente'"
+      class="col-12"
+    >
+      <div class="row justify-content-around">
+        <div class="col-5">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="nombre">Nombre</label>
+            <input
+              formControlName="nombre"
+              type="text"
+              class="form-control form-control-sm"
+              id="nombre"
+              name="nombre"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessages Nombre -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('nombre')?.hasError('nombreInvalido') &&
+              formularioPaciente.get('nombre')?.touched
+            "
+          >
+            * El nombre no puede contener espacios.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('nombre')?.hasError('required') &&
+              formularioPaciente.get('nombre')?.touched
+            "
+          >
+            * El nombre es requerido.
+          </div>
+          <!-- ErrorMessages Nombre END -->
+          <div class="input-group mb-3">
+            <label for="email" class="input-group-text">Email</label>
+            <input
+              formControlName="email"
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessage Email -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('email')?.hasError('required') &&
+              formularioPaciente.get('email')?.touched
+            "
+          >
+            * El email es requerido.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('email')?.hasError('emailInvalido') &&
+              formularioPaciente.get('email')?.touched
+            "
+          >
+            * Debe tener un formato de email válido.
+          </div>
+          <!-- ErrorMessage Email END -->
+          <div class="input-group mb-3">
+            <label for="password" class="input-group-text">Password</label>
+            <input
+              formControlName="password"
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessage Password -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('password')?.hasError('minlength') &&
+              formularioPaciente.get('password')?.touched
+            "
+          >
+            *La contraseña debe contener 8 caracteres como minimo.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('password')?.hasError('required') &&
+              formularioPaciente.get('password')?.touched
+            "
+          >
+            *La contraseña es requerida.
+          </div>
+          <!-- ErrorMessage Password END -->
+          <div class="mb-4">
+            <label for="foto" class="form-label"
+              >Fotos de Perfil<small> (Deben ser 2 imágenes)</small></label
+            >
+            <input
+              (change)="onFileChangePaciente($event)"
+              formControlName="urlImgs"
+              class="form-control"
+              type="file"
+              id="foto"
+              multiple="multiple"
+            />
+          </div>
+          <!-- ErrorMessage Img  -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('urlImgs')?.hasError('imgInvalida') &&
+              formularioPaciente.get('urlImgs')?.touched
+            "
+          >
+            * El formato debe ser .jpeg o .png.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('urlImgs')?.hasError('required') &&
+              formularioPaciente.get('urlImgs')?.touched
+            "
+          >
+            * La imágen es requerida.
+          </div>
+          <!-- ErrorMessage Img END -->
+        </div>
+        <div class="col-5">
+          <div class="input-group mb-3">
+            <label for="apellido" class="input-group-text">Apellido</label>
+            <input
+              formControlName="apellido"
+              type="text"
+              class="form-control"
+              id="apellido"
+              name="apellido"
+              autocomplete="off"
+            />
+          </div>
+
+          <!-- ErrorMessage Apellido  -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente
+                .get('apellido')
+                ?.hasError('apellidoInvalido') &&
+              formularioPaciente.get('apellido')?.touched
+            "
+          >
+            * El apellido no puede contener mas de 2 espacios.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('apellido')?.hasError('required') &&
+              formularioPaciente.get('apellido')?.touched
+            "
+          >
+            * El apellido es requerido.
+          </div>
+          <!-- ErrorMessage Apellido END -->
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="dni">Dni</label>
+            <input
+              formControlName="dni"
+              type="text"
+              class="form-control form-control-sm"
+              id="dni"
+              name="dni"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessages dni -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('dni')?.hasError('dniInvalido') &&
+              formularioPaciente.get('dni')?.touched
+            "
+          >
+            * El dni no puede contener espacios.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('dni')?.hasError('required') &&
+              formularioPaciente.get('dni')?.touched
+            "
+          >
+            * El dni es requerido.
+          </div>
+          <!-- ErrorMessages Dni END -->
+          <div class="input-group mb-3">
+            <label for="edad" class="input-group-text">Edad</label>
+            <input
+              formControlName="edad"
+              type="edad"
+              class="form-control"
+              id="edad"
+              name="edad"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessage Edad -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('edad')?.hasError('required') &&
+              formularioPaciente.get('edad')?.touched
+            "
+          >
+            * La edad es requerida.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('edad')?.hasError('min') &&
+              formularioPaciente.get('edad')?.touched
+            "
+          >
+            * La edad minima es de 18 años.
+          </div>
+          <!-- ErrorMessage Edad END -->
+          <div class="input-group mb-5">
+            <label for="obraSocial" class="input-group-text">Obra Social</label>
+            <input
+              formControlName="obraSocial"
+              type="text"
+              class="form-control"
+              id="obraSocial"
+              name="obraSocial"
+              autocomplete="off"
+            />
+          </div>
+          <div class="row justify-content-around">
+            <button
+              type="submit"
+              class="btn btn-success btn-lg col-4"
+              [disabled]="formularioPaciente.invalid"
+            >
+              Registrarse
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-lg col-4"
+              (click)="onVolver()"
+            >
+              Volver
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <form
+      [formGroup]="formularioEspecialista"
+      (ngSubmit)="onSubmit()"
+      *ngIf="tipoUsuario == 'especialista'"
+      class="col-12"
+    >
+      <div class="row justify-content-around">
+        <div class="col-5">
+          <div class="input-group mb-3">
+            <label for="nombre" class="input-group-text">Nombre</label>
+            <input
+              formControlName="nombre"
+              type="text"
+              class="form-control"
+              id="nombre"
+              name="nombre"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessages Nombre -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista
+                .get('nombre')
+                ?.hasError('nombreInvalido') &&
+              formularioEspecialista.get('nombre')?.touched
+            "
+          >
+            * El nombre no puede contener espacios.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('nombre')?.hasError('required') &&
+              formularioEspecialista.get('nombre')?.touched
+            "
+          >
+            * El nombre es requerido.
+          </div>
+          <!-- ErrorMessages Nombre END-->
+          <div class="input-group mb-3">
+            <label for="email" class="input-group-text">Email</label>
+            <input
+              formControlName="email"
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessage Email -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('email')?.hasError('required') &&
+              formularioEspecialista.get('email')?.touched
+            "
+          >
+            * El email es requerido.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('email')?.hasError('emailInvalido') &&
+              formularioEspecialista.get('email')?.touched
+            "
+          >
+            * Debe tener un formato de email válido.
+          </div>
+          <!-- ErrorMessage Email END -->
+          <div class="input-group mb-3">
+            <label for="password" class="input-group-text">Password</label>
+            <input
+              formControlName="password"
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessage Password -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('password')?.hasError('minlength') &&
+              formularioEspecialista.get('password')?.touched
+            "
+          >
+            * La contraseña debe contener 8 caracteres como minimo.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('password')?.hasError('required') &&
+              formularioEspecialista.get('password')?.touched
+            "
+          >
+            * La contraseña es requerida.
+          </div>
+          <!-- ErrorMessage Password END -->
+          <div class="mb-4">
+            <label for="foto" class="form-label"
+              >Fotos de Perfil<small> (Debe ser 1 imágen)</small></label
+            >
+            <input
+              formControlName="urlImg"
+              class="form-control"
+              type="file"
+              id="foto"
+            />
+          </div>
+          <!-- ErrorMessage Img  -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+            formularioEspecialista.get('urlImg')?.hasError('imgInvalida') &&
+            formularioEspecialista.get('urlImg')?.touched
+            "
+          >
+            * El formato debe ser .jpeg o .png.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+            formularioEspecialista.get('urlImg')?.hasError('required') &&
+            formularioEspecialista.get('urlImg')?.touched
+            "
+          >
+            * La imágen es requerida.
+          </div>
+          <!-- ErrorMessage Img END -->
+        </div>
+
+        <div class="col-5">
+          <div class="input-group mb-3">
+            <label for="apellido" class="input-group-text">Apellido</label>
+            <input
+              formControlName="apellido"
+              type="text"
+              class="form-control"
+              id="apellido"
+              name="apellido"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessage Apellido  -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista
+                .get('apellido')
+                ?.hasError('apellidoInvalido') &&
+              formularioEspecialista.get('apellido')?.touched
+            "
+          >
+            * El apellido no puede contener mas de 2 espacios.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('apellido')?.hasError('required') &&
+              formularioEspecialista.get('apellido')?.touched
+            "
+          >
+            * El apellido es requerido.
+          </div>
+          <!-- ErrorMessage Apellido END -->
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="dni">Dni</label>
+            <input
+              formControlName="dni"
+              type="text"
+              class="form-control form-control-sm"
+              id="dni"
+              name="dni"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessages dni -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('dni')?.hasError('dniInvalido') &&
+              formularioEspecialista.get('dni')?.touched
+            "
+          >
+            * El dni no puede contener espacios.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('dni')?.hasError('required') &&
+              formularioEspecialista.get('dni')?.touched
+            "
+          >
+            * El dni es requerido.
+          </div>
+          <!-- ErrorMessages Dni END -->
+          <div class="input-group mb-3">
+            <label for="edad" class="input-group-text">Edad</label>
+            <input
+              formControlName="edad"
+              type="edad"
+              class="form-control"
+              id="edad"
+              name="edad"
+              autocomplete="off"
+            />
+          </div>
+          <!-- ErrorMessage Edad -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('edad')?.hasError('required') &&
+              formularioEspecialista.get('edad')?.touched
+            "
+          >
+            * La edad es requerida.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('edad')?.hasError('min') &&
+              formularioEspecialista.get('edad')?.touched
+            "
+          >
+            * La edad minima es de 18 años.
+          </div>
+          <!-- ErrorMessage Edad END -->
+          <div class="input-group mb-5">
+            <label for="especialidad" class="input-group-text"
+              >Especialidad</label
+            >
+            <input
+              formControlName="especialidad"
+              type="text"
+              class="form-control"
+              id="especialidad"
+              name="especialidad"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="row justify-content-around">
+            <button
+              type="submit"
+              class="btn btn-success btn-lg col-4"
+              [disabled]="formularioEspecialista.invalid"
+            >
+              Registrarse
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-lg col-4"
+              (click)="onVolver()"
+            >
+              Volver
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

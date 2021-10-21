@@ -1,0 +1,82 @@
+<main class="row justify-content-center mt-1">
+  <section class="col-4 text-center">
+    <form [formGroup]="formulario" (ngSubmit)="ingresar()">
+      <img class="mb-2 img-fluid" src="{{ urlLogoEmpresa }}" />
+      <div class="form-floating mb-2">
+        <input
+          formControlName="email"
+          type="email"
+          class="form-control"
+          id="email"
+          placeholder="name@example.com"
+          name="email"
+          autocomplete="off"
+        />
+        <label for="email">Email</label>
+        <div
+          class="form-text text-danger"
+          *ngIf="
+            formulario.get('email')?.hasError('required') &&
+            formulario.get('email')?.touched
+          "
+        >
+          * El email es requerido.
+        </div>
+        <div
+          class="form-text text-danger"
+          *ngIf="
+            formulario.get('email')?.hasError('emailInvalido') &&
+            formulario.get('email')?.touched
+          "
+        >
+          * Debe tener un formato de email válido.
+        </div>
+      </div>
+      <div class="form-floating mb-2">
+        <input
+          formControlName="password"
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="Password"
+          name="password"
+          autocomplete="off"
+        />
+        <label for="password">Password</label>
+        <div
+          class="form-text text-danger"
+          *ngIf="
+            formulario.get('password')?.hasError('minlength') &&
+            formulario.get('password')?.touched
+          "
+        >
+          * La contraseña debe contener 8 caracteres como minimo.
+        </div>
+        <div
+          class="form-text text-danger"
+          *ngIf="
+            formulario.get('password')?.hasError('required') &&
+            formulario.get('password')?.touched
+          "
+        >
+          * La contraseña es requerida.
+        </div>
+      </div>
+      <small class="text-danger" *ngIf="mostrarError"
+        >El email o la contraseña son incorrectas</small
+      >
+      <div class="row justify-content-around">
+        <button class="btn btn-lg btn-primary mt-4 col-5" type="submit">
+          Ingresar
+        </button>
+        <button
+          class="btn btn-lg btn-primary mt-4 col-5"
+          type="button"
+          (click)="onRegistrarse()"
+        >
+          Registrarse
+        </button>
+      </div>
+    </form>
+  </section>
+</main>
