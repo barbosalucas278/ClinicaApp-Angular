@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { Observable } from 'rxjs/internal/Observable';
@@ -10,25 +10,56 @@ import { UsuarioService } from './usuarios/usuarios.service';
   providedIn: 'root',
 })
 export class AuthService {
-  currentUser?: import('firebase/compat').default.User;
+  statusUserChangedEvent: EventEmitter<boolean> = new EventEmitter();
+  currentUserChangedEvent: EventEmitter<boolean> = new EventEmitter();
+
+  hasLogged: boolean = false;
+  mostrarHeader: boolean;
+  currentUser?: any;
   constructor(
     private afAuth: AngularFireAuth,
     private usuariosService: UsuarioService,
     private fns: AngularFireFunctions,
     private storageService: StorageService
   ) {
+    this.mostrarHeader = false;
     this.afAuth.authState.subscribe((user) => {
-      this.currentUser = user!;
+      this.mostrarHeader = true;
+      this.setCurrentUser(user);
+      if (user && user.emailVerified) {
+        this.setHasLogged(true);
+      } else {
+        this.setHasLogged(false);
+      }
     });
   }
+  setCurrentUser(user: any) {
+    if (user != null) {
+      this.currentUser = user;
+      this.currentUserChangedEvent.emit(user);
+    }
+  }
+  setHasLogged(condition: boolean) {
+    this.hasLogged = condition;
+    this.statusUserChangedEvent.emit(condition);
+  }
   logout() {
+    this.mostrarHeader = false;
     return this.afAuth.signOut();
   }
   signin(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
+        if (user == null) {
+          throw new Error('El email o la contraseña son incorrectas');
+        } else if (!user.user?.emailVerified) {
+          throw new Error('El email no está verificado, por favor revise su correo.');          
+        }
         return user;
+      })
+      .catch((error) => {
+        throw error;
       });
   }
   async register(usuario: Usuario, files: File[]) {
@@ -79,7 +110,9 @@ export class AuthService {
         this.usuariosService.crearUsuarios(newUsuario);
       });
   }
-  getUserAuthState(): Observable<import('firebase/compat').default.User | null> {
+  getUserAuthState(): Observable<
+    import('firebase/compat').default.User | null
+  > {
     return this.afAuth.authState;
   }
 }

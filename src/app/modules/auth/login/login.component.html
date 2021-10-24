@@ -62,9 +62,9 @@
           * La contraseña es requerida.
         </div>
       </div>
-      <small class="text-danger" *ngIf="mostrarError"
-        >El email o la contraseña son incorrectas</small
-      >
+      <div class="alert alert-danger mt-3" role="alert" *ngIf="mostrarError">
+        <small>{{ mensajeError }}</small>
+      </div>
       <div class="row justify-content-around">
         <button class="btn btn-lg btn-primary mt-4 col-5" type="submit">
           Ingresar

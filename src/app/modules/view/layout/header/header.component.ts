@@ -2,6 +2,8 @@ import { environment } from 'src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/modules/auth/services/auth/auth.service';
 import { Router } from '@angular/router';
+import { UsuarioService } from 'src/app/modules/auth/services/auth/usuarios/usuarios.service';
+import { Usuario } from 'src/app/modules/clases/usuario';
 
 @Component({
   selector: 'app-header',
@@ -9,23 +11,40 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+  userData?: Usuario;
   userHasLogged: boolean;
   urlLogoEmpresa: string;
   nombreEmpresa: string;
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private userService: UsuarioService
+  ) {
     this.userHasLogged = false;
     this.nombreEmpresa = environment.nombreEmpresa;
     this.urlLogoEmpresa = environment.urlImgLogoEmpresa;
   }
 
   ngOnInit(): void {
-    this.authService.getUserAuthState().subscribe((user) => {
-      if (user) {
-        this.userHasLogged = true;
+    this.authService.statusUserChangedEvent.subscribe((condition) => {
+      //Evaluo la candicion del logeo del usuario para setear bien la animacion de la aparicion del header
+      //si recien entra, que tarde 1 seg mas(tiempo que transcurre en el guard para no leer datos null)
+      //que cuando deslogea
+      if (condition) {
+        setTimeout(() => {
+          this.userHasLogged = condition;
+        }, 1000);
       } else {
-        this.userHasLogged = false;
+        this.userHasLogged = condition;
       }
     });
+    setTimeout(() => {
+      this.userService
+        .obtenerCurrentUsuario(this.authService.currentUser?.email!)
+        .subscribe((userData) => {
+          this.userData = userData[0];
+        });
+    }, 500);
   }
   onLogout() {
     this.authService.logout().then(() => {

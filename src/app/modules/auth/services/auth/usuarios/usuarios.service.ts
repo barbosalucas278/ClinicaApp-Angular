@@ -17,7 +17,7 @@ export class UsuarioService {
   }
   obtenerCurrentUsuario(emailCurrentUser: string) {    
     const currentUsuario = this.db.collection('usuarios',ref => ref.where('email', '==', `${emailCurrentUser}`))
-    return currentUsuario.valueChanges();
+    return currentUsuario.valueChanges() as Observable<Usuario[]>;
   }
   crearUsuarios(usuario: Usuario) {
     return this.usuariosRef.add({ ...usuario });

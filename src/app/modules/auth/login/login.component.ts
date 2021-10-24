@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   emailUsuario: string;
   passwordUsuario: string;
   public mostrarError = false;
+  mensajeError: string = '';
   formulario: FormGroup;
   constructor(
     private fb: FormBuilder,
@@ -47,12 +48,28 @@ export class LoginComponent implements OnInit {
     this.authService
       .signin(email, password)
       .then((usuario) => {
-        console.log("a home");
-        
         this.router.navigate(['home']);
       })
-      .catch(() => {
+      .catch((error) => {
+        switch (error.code) {
+          case 'auth/user-not-found':
+            this.mensajeError = `No existe el usuario en nuestro registro`;
+            break;
+          case 'auth/wrong-password':
+            this.mensajeError = `La contraseña es incorrecta`;
+            break;
+          default:
+            this.mensajeError = error.message;
+            break;
+        }
         this.mostrarError = true;
+        setTimeout(() => {
+          this.resetMensajeError();
+        }, 2000);
       });
+  }
+  resetMensajeError() {
+    this.mostrarError = false;
+    this.mensajeError = '';
   }
 }

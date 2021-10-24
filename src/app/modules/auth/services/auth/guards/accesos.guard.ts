@@ -20,54 +20,40 @@ import { UsuarioService } from '../usuarios/usuarios.service';
 export class AccesosGuard implements CanActivate, CanActivateChild, CanLoad {
   constructor(private authService: AuthService, private router: Router) {}
   async canActivate(): Promise<boolean> {
-    const user = this.authService.currentUser;
-    const claim = await user!.getIdTokenResult();
-    let token: firebase.default.auth.IdTokenResult;
-    let respuestaPromesa = false;
-    token = claim;
-    if (token!.claims['paciente'] && token!.claims['email_verified']) {
-      respuestaPromesa = true;
-    } else if (
-      token!.claims['especialista'] &&
-      token!.claims['email_verified']
-    ) {
-      respuestaPromesa = true;
-    } else if (
-      token!.claims['administrador'] &&
-      token!.claims['email_verified']
-    ) {
-      respuestaPromesa = true;
-    }
-    return respuestaPromesa;
+    let respuestaPromesa: Promise<boolean> = new Promise<boolean>(
+      (resolve, reject) => {
+        setTimeout(async () => {
+          let respuesta: boolean = false;
+          const user = this.authService.currentUser;
+          console.log(user);
+          
+          if (user == null) {
+            this.authService.logout();
+            this.router.navigate(['auth']);
+          } else {
+            const claim = await user!.getIdTokenResult();
+            if(!claim!.claims['email_verified']) throw new Error("El email no esta verificado");
+            
+            if (claim!.claims['paciente']) {
+              respuesta = true;
+            } else if (claim!.claims['especialista']) {
+              respuesta = true;
+            } else if (claim!.claims['administrador']) {
+              respuesta = true;
+            } else {
+              setTimeout(() => {
+                this.authService.logout();
+                this.router.navigate(['auth']);
+              }, 1000);
+            }
+          }
+          resolve(respuesta);
+        }, 1000);
+      }
+    );
+    const salida: boolean = await respuestaPromesa;
 
-    // let resultado = this.authService
-    //   .getUserAuthState()
-    //   .pipe(
-    //     map(async (user) => {
-    //       const claim = await user!.getIdTokenResult();
-    //       let token: firebase.default.auth.IdTokenResult;
-    //       let respuestaPromesa = false;
-    //       token = claim;
-    //       if (token!.claims['paciente'] && token!.claims['email_verified']) {
-    //         respuestaPromesa = true;
-    //       } else if (
-    //         token!.claims['especialista'] &&
-    //         token!.claims['email_verified']
-    //       ) {
-    //         respuestaPromesa = true;
-    //       } else if (
-    //         token!.claims['administrador'] &&
-    //         token!.claims['email_verified']
-    //       ) {
-    //         respuestaPromesa = true;
-    //       }
-    //       return respuestaPromesa;
-    //     })
-    //   )
-    //   .toPromise();
-    // return resultado.then(async (result) => {
-    //   return await result;
-    // });
+    return salida;
   }
   canActivateChild(
     childRoute: ActivatedRouteSnapshot,
