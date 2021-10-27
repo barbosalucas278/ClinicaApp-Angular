@@ -1,8 +1,66 @@
-<main class="row justify-content-center mt-1">
-  <section class="col-4 text-center">
-    <form [formGroup]="formulario" (ngSubmit)="ingresar()">
-      <img class="mb-2 img-fluid" src="{{ urlLogoEmpresa }}" />
-      <div class="form-floating mb-2">
+<main class="row justify-content-center">
+  <section class="col-6 text-center">
+    <img class="mb-2 img-fluid" src="{{ urlLogoEmpresa }}" />
+    <spinner *ngIf="mostrarSpinner"></spinner>
+    <!-- Modal Start -->
+    <div
+      class="modal fade"
+      id="modalRapido"
+      tabindex="-1"
+      aria-labelledby="modalRapidoLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalRapidoLabel">
+              Eliga el tipo de cuenta
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row justify-content-between">
+              <div class="col-2" *ngFor="let usuario of accesosRapido">
+                <button
+                  class="text-center btn"
+                  (click)="llenarFormulario(usuario.email!, usuario.password!)"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <img
+                    [src]="usuario.urlImgs![0] | getDownloadURL"
+                    class="contenedor-redondo"
+                  />
+                  <p>{{ usuario.tipoUsuario | titlecase }}</p>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal End -->
+    <form
+      *ngIf="!mostrarSpinner"
+      [formGroup]="formulario"
+      (ngSubmit)="ingresar()"
+      class="row justify-content-center"
+    >
+      <div class="form-floating mb-2 col-8">
         <input
           formControlName="email"
           type="email"
@@ -11,28 +69,11 @@
           placeholder="name@example.com"
           name="email"
           autocomplete="off"
+          value="{{ formulario.value['email'] }}"
         />
-        <label for="email">Email</label>
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formulario.get('email')?.hasError('required') &&
-            formulario.get('email')?.touched
-          "
-        >
-          * El email es requerido.
-        </div>
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formulario.get('email')?.hasError('emailInvalido') &&
-            formulario.get('email')?.touched
-          "
-        >
-          * Debe tener un formato de email válido.
-        </div>
+        <label for="email" class="ps-4">Email</label>
       </div>
-      <div class="form-floating mb-2">
+      <div class="form-floating mb-2 col-8">
         <input
           formControlName="password"
           type="password"
@@ -41,36 +82,27 @@
           placeholder="Password"
           name="password"
           autocomplete="off"
+          value="{{ formulario.value['password'] }}"
         />
-        <label for="password">Password</label>
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formulario.get('password')?.hasError('minlength') &&
-            formulario.get('password')?.touched
-          "
-        >
-          * La contraseña debe contener 8 caracteres como minimo.
-        </div>
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formulario.get('password')?.hasError('required') &&
-            formulario.get('password')?.touched
-          "
-        >
-          * La contraseña es requerida.
-        </div>
+        <label for="password" class="ps-4">Contraseña</label>
       </div>
       <div class="alert alert-danger mt-3" role="alert" *ngIf="mostrarError">
         <small>{{ mensajeError }}</small>
       </div>
       <div class="row justify-content-around">
-        <button class="btn btn-lg btn-primary mt-4 col-5" type="submit">
+        <button class="btn btn-lg btn-primary mt-4 col-3" type="submit">
           Ingresar
         </button>
         <button
-          class="btn btn-lg btn-primary mt-4 col-5"
+          class="btn btn-lg btn-primary mt-4 col-3"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#modalRapido"
+        >
+          Acceso Rápido
+        </button>
+        <button
+          class="btn btn-lg btn-primary mt-4 col-3"
           type="button"
           (click)="onRegistrarse()"
         >

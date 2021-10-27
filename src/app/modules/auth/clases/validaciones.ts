@@ -45,7 +45,7 @@ export class Validaciones {
     if (control.value) {
       const archivos = control.value.split('.');
       const extension = archivos[archivos.length - 1];
-      if (extension != 'jpeg' && extension != 'png') {
+      if (extension != 'jpeg' && extension != 'jpg') {
         return { imgInvalida: true };
       }
     }

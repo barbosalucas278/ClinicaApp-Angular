@@ -1,0 +1,30 @@
+<div class="row mt-1">
+    <div class="col-12">
+        <button class="btn btn-info ms-3 me-3">Pacientes</button>
+        <button class="btn btn-info me-3">Especialistas</button>
+        <button class="btn btn-info me-3">Administradores</button>
+        <button class="btn btn-success">Todos</button>
+    </div>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <!-- <th scope="col">Edad</th> -->
+        <th scope="col">DNI</th>
+        <!-- <th scope="col">Email</th> -->
+        <th scope="col">Obra Social</th>
+        <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of usuarios">
+        <td>{{user.nombre}}</td>
+        <td>{{user.apellido}}</td>
+        <td>{{user.dni}}</td>
+        <td>{{user.obraSocial}}</td>
+        <th scope="row">1</th>
+    </tr>
+  </tbody>
+</table>

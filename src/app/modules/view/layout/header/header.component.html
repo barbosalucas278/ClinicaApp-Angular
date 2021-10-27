@@ -20,7 +20,7 @@
       >
         <ul class="navbar-nav mb-2 mb-md-0">
           <li class="nav-item" *ngIf="userData?.tipoUsuario == 'administrador'">
-            <a class="nav-link active" aria-current="page" href="#">Usuarios</a>
+            <a class="nav-link" (click)="onUsuarios()">Usuarios</a>
           </li>
           <li class="nav-item">
             <a

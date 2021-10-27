@@ -8,9 +8,12 @@ import {
   providedIn: 'root',
 })
 export class StorageService {
-  constructor(private storage: AngularFireStorage) {}
-  uploadFilePublic(file: File): AngularFireUploadTask {
-    const nombreArchivo = `usuarios-temp/temp-${file.name}`;
+  private nombreColeccion: string;
+  constructor(private storage: AngularFireStorage) {
+    this.nombreColeccion = 'usuarios-temp';
+  }
+  uploadFilePublic(file: File, dni: string): AngularFireUploadTask {
+    const nombreArchivo = `${this.nombreColeccion}/${dni}-${Date.now()}`;
     const ref = this.storage.ref(nombreArchivo);
     return ref.put(file);
   }

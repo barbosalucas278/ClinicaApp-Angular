@@ -12,4 +12,8 @@ export const environment = {
   urlImgEmpresa: '../assets/img-login.png',
   urlImgLogoEmpresa: '../assets/img-logo.png',
   urlImgRegisterEmpresa: '../assets/img-register.png',
+  urlImgPaciente: '../assets/img-paciente.png',
+  urlImgEspecialista: '../assets/img-especialista.png',
+  urlImgSpinner: '../assets/img-spinner.gif',
+  urlImgHome: '../assets/img-home.jpg',
 };

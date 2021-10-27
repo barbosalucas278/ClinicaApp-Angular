@@ -24,9 +24,7 @@ export class AccesosGuard implements CanActivate, CanActivateChild, CanLoad {
       (resolve, reject) => {
         setTimeout(async () => {
           let respuesta: boolean = false;
-          const user = this.authService.currentUser;
-          console.log(user);
-          
+          const user = this.authService.currentUser;          
           if (user == null) {
             this.authService.logout();
             this.router.navigate(['auth']);

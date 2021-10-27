@@ -32,19 +32,20 @@ export class HeaderComponent implements OnInit {
       //que cuando deslogea
       if (condition) {
         setTimeout(() => {
+          this.userService
+            .obtenerCurrentUsuario(this.authService.currentUser?.email!)
+            .subscribe((userData) => {
+              this.userData = userData[0];
+              console.log(userData[0]);
+            });
           this.userHasLogged = condition;
         }, 1000);
       } else {
-        this.userHasLogged = condition;
+        setTimeout(() => {
+          this.userHasLogged = condition;
+        }, 1000);
       }
     });
-    setTimeout(() => {
-      this.userService
-        .obtenerCurrentUsuario(this.authService.currentUser?.email!)
-        .subscribe((userData) => {
-          this.userData = userData[0];
-        });
-    }, 500);
   }
   onLogout() {
     this.authService.logout().then(() => {
@@ -52,5 +53,10 @@ export class HeaderComponent implements OnInit {
         this.router.navigate(['auth']);
       }, 500);
     });
+  }
+  onUsuarios() {
+    setTimeout(() => {
+      this.router.navigate(['administracion/usuarios']);
+    }, 500);
   }
 }

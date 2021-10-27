@@ -10,12 +10,12 @@ import { ErrorPageComponent } from './error-page/error-page.component';
   declarations: [
     HeaderComponent,
     FooterComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
   ],
   exports: [
     HeaderComponent,
     FooterComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
   ],
   imports: [
     CommonModule

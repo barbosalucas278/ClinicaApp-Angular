@@ -14,7 +14,6 @@ export class AuthService {
   currentUserChangedEvent: EventEmitter<boolean> = new EventEmitter();
 
   hasLogged: boolean = false;
-  mostrarHeader: boolean;
   currentUser?: any;
   constructor(
     private afAuth: AngularFireAuth,
@@ -22,11 +21,9 @@ export class AuthService {
     private fns: AngularFireFunctions,
     private storageService: StorageService
   ) {
-    this.mostrarHeader = false;
     this.afAuth.authState.subscribe((user) => {
-      this.mostrarHeader = true;
-      this.setCurrentUser(user);
       if (user && user.emailVerified) {
+        this.setCurrentUser(user);
         this.setHasLogged(true);
       } else {
         this.setHasLogged(false);
@@ -44,18 +41,30 @@ export class AuthService {
     this.statusUserChangedEvent.emit(condition);
   }
   logout() {
-    this.mostrarHeader = false;
     return this.afAuth.signOut();
   }
   signin(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
-      .then((user) => {
+      .then(async (user) => {
+        console.log(user);
+
         if (user == null) {
           throw new Error('El email o la contraseña son incorrectas');
         } else if (!user.user?.emailVerified) {
-          throw new Error('El email no está verificado, por favor revise su correo.');          
+          throw new Error(
+            'El email no está verificado, por favor revise su correo.'
+          );
         }
+        //Excluvio de proyecto clinica
+        const token = await user.user.getIdTokenResult();
+        if (token.claims['especialista'] && !token.claims['aprobado']) {
+          this.logout();
+          throw new Error(
+            'Su cuenta debe ser aprobada por un Administrador para poder ingresar'
+          );
+        }
+        //
         return user;
       })
       .catch((error) => {
@@ -95,19 +104,19 @@ export class AuthService {
         user.user?.sendEmailVerification();
         const newUsuario: Usuario = { ...usuario };
         //Guardado de las imagenes del usuario en el storage
+        const dni = newUsuario.dni!;
         for (const file in files) {
           if (Object.prototype.hasOwnProperty.call(files, file)) {
             const element = files[file];
-            console.log(element);
-            console.log(files);
-
-            this.storageService.uploadFilePublic(element).then((task) => {
+            this.storageService.uploadFilePublic(element, dni).then((task) => {
               newUsuario.urlImgs?.push(task.metadata.fullPath);
             });
           }
         }
         //Guardado de los datos del usuario en el firestore database
-        this.usuariosService.crearUsuarios(newUsuario);
+        setTimeout(() => {
+          this.usuariosService.crearUsuarios(newUsuario);
+        }, 5000);
       });
   }
   getUserAuthState(): Observable<

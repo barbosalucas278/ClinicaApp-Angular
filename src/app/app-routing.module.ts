@@ -22,6 +22,11 @@ const routes: Routes = [
       import('./modules/auth/auth.module').then((m) => m.AuthModule),
   },
   {
+    path: 'administracion',
+    loadChildren: () =>
+      import('./modules/view/administracion/administracion.module').then((m) => m.AdministracionModule),
+  },
+  {
     path: '**',
     component: ErrorPageComponent,
   },
