@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
             .obtenerCurrentUsuario(this.authService.currentUser?.email!)
             .subscribe((userData) => {
               this.userData = userData[0];
-              console.log(userData[0]);
+              // console.log(userData[0]);
             });
           this.userHasLogged = condition;
         }, 1000);
