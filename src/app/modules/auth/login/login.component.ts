@@ -51,13 +51,13 @@ export class LoginComponent implements OnInit {
         tipoUsuario: 'especialista',
         email: 'especialista1@especialista.com',
         password: 'especialista123',
-        urlImgs: ['usuarios-temp/44444444-1635187102099'],
+        urlImgs: ['usuarios-temp/44444444-1635372174004'],
       },
       {
         tipoUsuario: 'especialista',
         email: 'especialista2@especialista.com',
         password: 'especialista123',
-        urlImgs: ['usuarios-temp/55555555-1635187220540'],
+        urlImgs: ['usuarios-temp/55555555-1635372276126'],
       },
       {
         tipoUsuario: 'administrador',

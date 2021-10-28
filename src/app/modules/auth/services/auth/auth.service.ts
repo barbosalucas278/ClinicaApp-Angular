@@ -72,6 +72,10 @@ export class AuthService {
       });
   }
   async register(usuario: Usuario, files: File[]) {
+    let test:any; 
+    await this.afAuth.credential.subscribe(x => {
+        test = x;
+    });
     return this.afAuth
       .createUserWithEmailAndPassword(usuario.email!, usuario.password!)
       .then((user) => {
@@ -116,6 +120,8 @@ export class AuthService {
         //Guardado de los datos del usuario en el firestore database
         setTimeout(() => {
           this.usuariosService.crearUsuarios(newUsuario);
+          this.afAuth.signOut()
+          this.afAuth.signInWithCredential(test)
         }, 5000);
       });
   }
@@ -123,5 +129,26 @@ export class AuthService {
     import('firebase/compat').default.User | null
   > {
     return this.afAuth.authState;
+  }
+  /**
+   * Funcion para manejar el estado de habilitado de un especialista
+   * @param email Email dle especialista
+   * @param accion true: habilita | false: inhabilita
+   * @returns
+   */
+  funcionHabilitarEspecialista(email: string, accion: boolean) {
+    if (email) {
+      const fnAdministrador = this.fns.httpsCallable('aprobarEspecialista');
+      fnAdministrador({ email: email, accion: accion })
+        .toPromise()
+        .then((res) => {
+          this.usuariosService.modificarEstadoEspecialista(email, accion);
+        })
+        .catch((error) => {
+          throw error;
+        });
+    } else {
+      throw new Error('El email no tiene que ser nulo');
+    }
   }
 }

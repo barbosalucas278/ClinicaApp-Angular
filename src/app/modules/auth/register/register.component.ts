@@ -21,7 +21,7 @@ import { AuthService } from '../services/auth/auth.service';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
-  @Input() adminPanel:boolean;
+  @Input() adminPanel: boolean;
   mostrarSpinner: boolean;
   urlImgRegisterEmpresa: string;
   imgBtnPaciente: string;
@@ -116,7 +116,12 @@ export class RegisterComponent implements OnInit {
         .then(() => {
           this.mostrarSpinner = true;
           setTimeout(() => {
-            this.router.navigate(['auth']);
+            if (!this.adminPanel) {
+              this.authService.logout();
+              this.router.navigate(['auth']);
+            } else {
+              this.onVolverSeleccionTipuUsuario();
+            }
           }, 1500);
         });
     } else if (this.tipoUsuario == 'especialista') {
@@ -129,13 +134,19 @@ export class RegisterComponent implements OnInit {
       this.usuarioEspecialista.dni = dni;
       this.usuarioEspecialista.password = password;
       this.usuarioEspecialista.especialidad = especialidad;
+      this.usuarioEspecialista.aprobado = false;
 
       this.authService
         .register(this.usuarioEspecialista, this.urlImgEspecialista!)
         .then(() => {
           this.mostrarSpinner = true;
           setTimeout(() => {
-            this.router.navigate(['auth']);
+            if (!this.adminPanel) {
+              this.authService.logout();
+              this.router.navigate(['auth']);
+            } else {
+              this.onVolverSeleccionTipuUsuario();
+            }
           }, 1500);
         });
     } else {
@@ -152,8 +163,12 @@ export class RegisterComponent implements OnInit {
         .then(() => {
           this.mostrarSpinner = true;
           setTimeout(() => {
-            this.authService.logout();
-            this.router.navigate(['auth']);
+            if (!this.adminPanel) {
+              this.authService.logout();
+              this.router.navigate(['auth']);
+            } else {
+              this.onVolverSeleccionTipuUsuario();
+            }
           }, 1500);
         });
     }

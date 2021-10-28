@@ -1,30 +1,140 @@
 <div class="row mt-1">
-    <div class="col-12">
-        <button class="btn btn-info ms-3 me-3">Pacientes</button>
-        <button class="btn btn-info me-3">Especialistas</button>
-        <button class="btn btn-info me-3">Administradores</button>
-        <button class="btn btn-success">Todos</button>
-    </div>
+  <div class="col-12">
+    <button
+      class="btn btn-info ms-3 me-3"
+      (click)="showTablaPacientes()"
+      *ngIf="!showRegistrar"
+    >
+      Pacientes
+    </button>
+    <button
+      class="btn btn-info me-3"
+      (click)="showTablaEspecialistas()"
+      *ngIf="!showRegistrar"
+    >
+      Especialistas
+    </button>
+    <button
+      class="btn btn-info me-3"
+      (click)="showTablaAdministradores()"
+      *ngIf="!showRegistrar"
+    >
+      Administradores
+    </button>
+    <button
+      class="btn btn-info me-3"
+      (click)="showCrearUsuario()"
+      *ngIf="!showRegistrar"
+    >
+      Crear Usuario
+    </button>
+    <button
+      class="btn btn-warning me-3"
+      (click)="cancelarCrearUsuario()"
+      *ngIf="showRegistrar"
+    >
+      Cancelar Creacion de Usuario
+    </button>
+  </div>
 </div>
-<table class="table">
+<div class="mt-5">
+  <app-register *ngIf="showRegistrar" [adminPanel]="true"></app-register>
+</div>
+<table
+  *ngIf="tablaActiva == 'paciente' && !showRegistrar"
+  class="table"
+  id="tabla-pacientes"
+>
   <thead>
     <tr>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <!-- <th scope="col">Edad</th> -->
-        <th scope="col">DNI</th>
-        <!-- <th scope="col">Email</th> -->
-        <th scope="col">Obra Social</th>
-        <th scope="col">Acciones</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Apellido</th>
+      <th scope="col">DNI</th>
+      <th scope="col">Obra Social</th>
+      <th scope="col">Acciones</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user of usuarios">
-        <td>{{user.nombre}}</td>
-        <td>{{user.apellido}}</td>
-        <td>{{user.dni}}</td>
-        <td>{{user.obraSocial}}</td>
-        <th scope="row">1</th>
+    <tr *ngFor="let user of usuariosFiltrados">
+      <td>{{ user.nombre }}</td>
+      <td>{{ user.apellido }}</td>
+      <td>{{ user.dni }}</td>
+      <td>{{ user.obraSocial }}</td>
+      <th scope="row">1</th>
+    </tr>
+  </tbody>
+</table>
+<table
+  *ngIf="tablaActiva == 'especialista' && !showRegistrar"
+  class="table"
+  id="tabla-especialistas"
+>
+  <thead>
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Apellido</th>
+      <th scope="col">DNI</th>
+      <th scope="col">Especialidad</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of usuariosFiltrados; let i = index">
+      <td>{{ user.nombre }}</td>
+      <td>{{ user.apellido }}</td>
+      <td>{{ user.dni }}</td>
+      <td>{{ user.especialidad }}</td>
+      <td class="p-0 m-0">
+        <button
+          class="btn btn-sm p-0"
+          *ngIf="user.aprobado"
+          (click)="onInhabilitarEspecialista(user.email, i, $event)"
+        >
+          <i
+            id="{{ i }}BtnHabilitarEspecialista"
+            class="bi bi-x-square-fill"
+            title="Inhabilitar"
+            style="color: red; font-size: 24px"
+          ></i>
+        </button>
+        <button
+          class="btn btn-sm p-0"
+          *ngIf="!user.aprobado"
+          (click)="onHabilitarEspecialista(user.email, i, $event)"
+        >
+          <i
+            id="{{ i }}BtnInhabilitarEspecialista"
+            class="bi bi-check-square-fill"
+            title="Habilitar"
+            style="color: green; font-size: 24px"
+          ></i>
+        </button>
+        <div class="spinnerChico">
+          <spinner hidden id="{{ i }}EspecialistaAdmin"></spinner>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table
+  *ngIf="tablaActiva == 'administrador' && !showRegistrar"
+  class="table"
+  id="tabla-administradores"
+>
+  <thead>
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Apellido</th>
+      <th scope="col">DNI</th>
+      <th scope="col">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of usuariosFiltrados">
+      <td>{{ user.nombre }}</td>
+      <td>{{ user.apellido }}</td>
+      <td>{{ user.dni }}</td>
+      <th scope="row">1</th>
     </tr>
   </tbody>
 </table>

@@ -8,19 +8,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentesGenericosModule } from '../componentes-genericos/componentes-genericos.module';
 import { GetDownloadURLPipeModule } from '@angular/fire/compat/storage';
 
-
 @NgModule({
-  declarations: [
-    RegisterComponent,
-    LoginComponent,
-  ],
+  declarations: [RegisterComponent, LoginComponent],
+  exports: [RegisterComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,
     ReactiveFormsModule,
     FormsModule,
     ComponentesGenericosModule,
-    GetDownloadURLPipeModule
-  ]
+    GetDownloadURLPipeModule,
+  ],
 })
-export class AuthModule { }
+export class AuthModule {}
