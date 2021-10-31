@@ -1,0 +1,25 @@
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5">
+    <div class="row">
+      <div class="col-4">
+        <img
+          [src]="currentUser.urlImgs[0] | getDownloadURL"
+          alt="Imagen de perfil"
+          class="img-fluid"
+        />
+      </div>
+      <div class="col-4 fs-3">
+        <p>Nombre: {{ currentUser.nombre }}</p>
+        <p>Edad: {{ currentUser.edad }}</p>
+      </div>
+      <div class="col-4 fs-3">
+        <p>Apellido: {{ currentUser.apellido }}</p>
+        <p>Dni: {{ currentUser.dni }}</p>
+      </div>
+    </div>
+    <div class="row fs-5">
+      <div class="col-4">{{ currentUser.email }}</div>
+      <div class="col-8"></div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
+import { Especialidad } from './especialidad';
 import { Usuario } from './usuario';
 
 export interface Especialista extends Usuario {
-  especialidad?: string[];
+  especialidad?: Especialidad[];
   aprobado?:boolean;
 }

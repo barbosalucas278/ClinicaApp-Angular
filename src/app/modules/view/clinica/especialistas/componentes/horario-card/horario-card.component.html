@@ -1,0 +1,35 @@
+<div class="col-md-11">
+  <div class="h-100 p-5 text-white bg-dark rounded-3 row">
+    <h2>{{ especialidad.detalle }}</h2>
+    <p>Establezca su disponibilidad horaria</p>
+    <div class="form-group">
+      <label class="me-5">Desde:</label>
+      <input
+        [(ngModel)]="desde"
+        value="desde"
+        type="time"
+        name="desde"
+        min="09:00"
+        max="18:00"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label class="me-5">Hasta:</label>
+      <input
+        [(ngModel)]="hasta"
+        value="hasta"
+        type="time"
+        name="hasta"
+        min="09:00"
+        max="18:00"
+        required
+      />
+    </div>
+    <div class="row justify-content-end">
+      <button class="btn btn-outline-light mt-3 col-4" type="button" (click)="onEstablecer()">
+        Establecer
+      </button>
+    </div>
+  </div>
+</div>

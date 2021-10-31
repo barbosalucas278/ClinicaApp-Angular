@@ -19,6 +19,28 @@
         id="navbarCollapse"
       >
         <ul class="navbar-nav mb-2 mb-md-0">
+          <!-- Header Especialista -->
+          <li class="nav-item" *ngIf="userData">
+            <a
+            data-bs-toggle="collapse"
+            data-bs-target=".navbar-collapse.show"
+            class="nav-link"
+            (click)="onMiPerfil()"
+            >Mi Perfil</a
+            >
+          </li>
+          <!-- Header Especialista FIN -->
+          <!-- Header Paciente -->
+          <li class="nav-item" *ngIf="userData?.tipoUsuario == 'paciente'">
+            <a
+            data-bs-toggle="collapse"
+            data-bs-target=".navbar-collapse.show"
+            class="nav-link"
+            (click)="onMiPerfil()"
+            >Mis Turnos</a
+            >
+          </li>
+          <!-- Header Paciente FIN -->
           <li class="nav-item" *ngIf="userData?.tipoUsuario == 'administrador'">
             <a
               data-bs-toggle="collapse"

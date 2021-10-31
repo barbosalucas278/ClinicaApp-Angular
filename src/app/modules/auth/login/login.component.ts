@@ -108,6 +108,8 @@ export class LoginComponent implements OnInit {
             this.mensajeError = error.message;
             break;
         }
+        this.authService.logout();
+        this.mostrarSpinner = false;
         this.mostrarError = true;
         setTimeout(() => {
           this.resetMensajeError();

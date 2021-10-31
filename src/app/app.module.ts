@@ -7,6 +7,7 @@ import { HomeModule } from './modules/view/home/home.module';
 import { LayoutModule } from './modules/view/layout/layout.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { FirebaseModule } from './modules/firebase/firebase.module';
+import { ClinicaModule } from './modules/view/clinica/clinica.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,6 +18,7 @@ import { FirebaseModule } from './modules/firebase/firebase.module';
     LayoutModule,
     HomeModule,
     AuthModule,
+    ClinicaModule
   ],
   providers: [],
   bootstrap: [AppComponent],

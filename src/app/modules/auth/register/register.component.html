@@ -162,6 +162,26 @@
           <label for="foto" class="form-label"
             >Fotos de Perfil<small> (Deben ser 2 imágenes)</small></label
           >
+          <!-- ErrorMessage Img  -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('urlImgs')?.hasError('imgInvalida') &&
+              formularioPaciente.get('urlImgs')?.touched
+            "
+          >
+            * El formato debe ser .jpeg o .png.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioPaciente.get('urlImgs')?.hasError('required') &&
+              formularioPaciente.get('urlImgs')?.touched
+            "
+          >
+            * La imágen es requerida.
+          </div>
+          <!-- ErrorMessage Img END -->
           <input
             (change)="onFileChangePaciente($event)"
             formControlName="urlImgs"
@@ -171,26 +191,6 @@
             multiple="multiple"
           />
         </div>
-        <!-- ErrorMessage Img  -->
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formularioPaciente.get('urlImgs')?.hasError('imgInvalida') &&
-            formularioPaciente.get('urlImgs')?.touched
-          "
-        >
-          * El formato debe ser .jpeg o .png.
-        </div>
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formularioPaciente.get('urlImgs')?.hasError('required') &&
-            formularioPaciente.get('urlImgs')?.touched
-          "
-        >
-          * La imágen es requerida.
-        </div>
-        <!-- ErrorMessage Img END -->
       </div>
       <div class="col-5">
         <div class="input-group mb-3">
@@ -302,7 +302,7 @@
           <button
             type="submit"
             class="btn btn-success btn-lg col-4"
-            [disabled]="formularioPaciente.invalid"
+            [disabled]="formularioPaciente.invalid && formReCaptcha.invalid"
           >
             Registrarse
           </button>
@@ -423,6 +423,26 @@
           <label for="foto" class="form-label"
             >Fotos de Perfil<small> (Debe ser 1 imágen)</small></label
           >
+          <!-- ErrorMessage Img  -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('urlImg')?.hasError('imgInvalida') &&
+              formularioEspecialista.get('urlImg')?.touched
+            "
+          >
+            * El formato debe ser .jpeg o .png.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioEspecialista.get('urlImg')?.hasError('required') &&
+              formularioEspecialista.get('urlImg')?.touched
+            "
+          >
+            * La imágen es requerida.
+          </div>
+          <!-- ErrorMessage Img END -->
           <input
             (change)="onFileChangePaciente($event)"
             formControlName="urlImg"
@@ -431,26 +451,6 @@
             id="foto"
           />
         </div>
-        <!-- ErrorMessage Img  -->
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formularioEspecialista.get('urlImg')?.hasError('imgInvalida') &&
-            formularioEspecialista.get('urlImg')?.touched
-          "
-        >
-          * El formato debe ser .jpeg o .png.
-        </div>
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formularioEspecialista.get('urlImg')?.hasError('required') &&
-            formularioEspecialista.get('urlImg')?.touched
-          "
-        >
-          * La imágen es requerida.
-        </div>
-        <!-- ErrorMessage Img END -->
       </div>
 
       <div class="col-5">
@@ -550,15 +550,44 @@
         </div>
         <!-- ErrorMessage Edad END -->
         <div class="input-group mb-5">
+          <input formControlName="especialidad" type="text" hidden />
+          <div class="col-12">
+            <div class="row">
+              <div
+                class="col-3"
+                *ngFor="let espe of especialidadesSeleccionada"
+              >
+                <h4>
+                  <span class="badge bg-secondary">
+                    <span>{{ espe.detalle }}</span>
+                    <i
+                      (click)="onDeleteEspecialidad($event)"
+                      class="bi bi-x-circle-fill"
+                      style="color: black"
+                    ></i
+                  ></span>
+                </h4>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 autocomplete-casero" *ngIf="mostrarAutocomplete" >
+            <ul>
+              <li
+                *ngFor="let especialidad of especialidadesFiltradas"
+                (click)="onEspecialidadSeleccionada($event)"
+              >
+                {{ especialidad.detalle }}
+              </li>
+            </ul>
+          </div>
           <label for="especialidad" class="input-group-text"
             >Especialidad</label
           >
           <input
-            formControlName="especialidad"
             type="text"
             class="form-control"
-            id="especialidad"
-            name="especialidad"
+            id="input-busqueda"
+            (keyup)="onChangeEspecialidad($event)"
             autocomplete="off"
           />
         </div>
@@ -567,7 +596,7 @@
           <button
             type="submit"
             class="btn btn-success btn-lg col-4"
-            [disabled]="formularioEspecialista.invalid"
+            [disabled]="formularioEspecialista.invalid && formReCaptcha.invalid"
           >
             Registrarse
           </button>
@@ -687,6 +716,26 @@
           <label for="foto" class="form-label"
             >Fotos de Perfil<small> (Debe ser 1 imágen)</small></label
           >
+          <!-- ErrorMessage Img  -->
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioAdministrador.get('urlImg')?.hasError('imgInvalida') &&
+              formularioAdministrador.get('urlImg')?.touched
+            "
+          >
+            * El formato debe ser .jpeg o .png.
+          </div>
+          <div
+            class="form-text text-danger"
+            *ngIf="
+              formularioAdministrador.get('urlImg')?.hasError('required') &&
+              formularioAdministrador.get('urlImg')?.touched
+            "
+          >
+            * La imágen es requerida.
+          </div>
+          <!-- ErrorMessage Img END -->
           <input
             (change)="onFileChangePaciente($event)"
             formControlName="urlImg"
@@ -695,26 +744,6 @@
             id="foto"
           />
         </div>
-        <!-- ErrorMessage Img  -->
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formularioAdministrador.get('urlImg')?.hasError('imgInvalida') &&
-            formularioAdministrador.get('urlImg')?.touched
-          "
-        >
-          * El formato debe ser .jpeg o .png.
-        </div>
-        <div
-          class="form-text text-danger"
-          *ngIf="
-            formularioAdministrador.get('urlImg')?.hasError('required') &&
-            formularioAdministrador.get('urlImg')?.touched
-          "
-        >
-          * La imágen es requerida.
-        </div>
-        <!-- ErrorMessage Img END -->
       </div>
 
       <div class="col-5">
@@ -818,7 +847,9 @@
           <button
             type="submit"
             class="btn btn-success btn-lg col-4"
-            [disabled]="formularioAdministrador.invalid"
+            [disabled]="
+              formularioAdministrador.invalid && formReCaptcha.invalid
+            "
           >
             Registrarse
           </button>
@@ -831,6 +862,21 @@
           </button>
         </div>
       </div>
+    </div>
+  </form>
+  <form
+    [formGroup]="formReCaptcha"
+    *ngIf="tipoUsuario != '' && !mostrarSpinner"
+    class="col-10"
+    style="margin-top: -40px"
+  >
+    <div class="input-group">
+      <ngx-invisible-recaptcha
+        #captchaElem
+        [siteKey]="siteKey"
+        formControlName="recaptcha"
+      >
+      </ngx-invisible-recaptcha>
     </div>
   </form>
 </div>

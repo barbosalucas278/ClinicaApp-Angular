@@ -1,7 +1,9 @@
-<footer class="footer py-3 bg-light fixed-bottom">
+<footer class="footer bg-light">
   <div class="container text-center">
-    <span class="text-muted">{{nombreEmpresa}} - {{
-        currentDate | date: "yyyy"
-      }}</span>
+    <div class="row align-items-center">
+      <span class="text-muted mt-3"
+        >{{ nombreEmpresa }} - {{ currentDate | date: "yyyy" }}</span
+      >
+    </div>
   </div>
 </footer>

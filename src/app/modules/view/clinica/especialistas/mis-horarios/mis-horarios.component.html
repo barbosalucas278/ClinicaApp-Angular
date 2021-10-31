@@ -1,0 +1,9 @@
+<div class="row">
+  <div *ngFor="let especialidad of listaDeEspecialidades" class="mb-5">
+    <app-horario-card
+      [especialidad]="especialidad"
+      (horarioEstablecidoEvent)="onHorarioEstablecido($event)"
+      class="col-6"
+    ></app-horario-card>
+  </div>
+</div>

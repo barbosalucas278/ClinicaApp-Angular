@@ -1,0 +1,15 @@
+<div class="container py-4">
+  <header class="pb-3 mb-4 border-bottom">
+    <a (click)="onShowMiPerfil()">
+      <span class="fs-4 me-5">Mi Perfil</span>
+    </a>
+    <a (click)="onShowMisHorarios()">
+      <span class="fs-4">Mis Horarios</span>
+    </a>
+  </header>
+  <app-mis-horarios
+    [especialista]="currentUser"
+    *ngIf="showMisHorarios && currentUser.tipoUsuario == 'especialista'"
+  ></app-mis-horarios>
+  <app-perfil [currentUser]="currentUser" *ngIf="showMiPerfil"></app-perfil>
+</div>

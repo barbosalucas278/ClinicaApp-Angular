@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentesGenericosModule } from '../componentes-genericos/componentes-genericos.module';
 import { GetDownloadURLPipeModule } from '@angular/fire/compat/storage';
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 @NgModule({
   declarations: [RegisterComponent, LoginComponent],
@@ -18,6 +19,7 @@ import { GetDownloadURLPipeModule } from '@angular/fire/compat/storage';
     FormsModule,
     ComponentesGenericosModule,
     GetDownloadURLPipeModule,
+    NgxCaptchaModule
   ],
 })
 export class AuthModule {}

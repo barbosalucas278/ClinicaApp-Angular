@@ -5,6 +5,7 @@ import { AdministracionRoutingModule } from './administracion-routing.module';
 import { UsuariosAdminComponent } from './usuarios-admin/usuarios-admin.component';
 import { ComponentesGenericosModule } from '../../componentes-genericos/componentes-genericos.module';
 import { AuthModule } from '../../auth/auth.module';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   declarations: [UsuariosAdminComponent],
@@ -13,6 +14,7 @@ import { AuthModule } from '../../auth/auth.module';
     AdministracionRoutingModule,
     ComponentesGenericosModule,
     AuthModule,
+    PipesModule
   ],
 })
 export class AdministracionModule {}

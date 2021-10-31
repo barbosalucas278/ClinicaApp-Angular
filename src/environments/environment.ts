@@ -21,6 +21,7 @@ export const environment = {
   urlImgSpinner: '../assets/img-spinner.gif',
   urlImgHome: '../assets/img-home.jpg',
   admin: '../assets/img-admin.jpg',
+  keyRecaptcha:'6LfH1P0cAAAAAJxsu8eQeb3ODmJUxjpH41NhLkGe'
 };
 
 /*

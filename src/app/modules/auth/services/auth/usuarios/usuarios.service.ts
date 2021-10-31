@@ -4,6 +4,7 @@ import {
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs/internal/Observable';
+import { Especialidad } from 'src/app/modules/clases/especialidad';
 import { Especialista } from 'src/app/modules/clases/especialista';
 import { Usuario } from 'src/app/modules/clases/usuario';
 import { AuthService } from '../auth.service';
@@ -23,7 +24,7 @@ export class UsuarioService {
     return currentUsuario.valueChanges() as Observable<Usuario[]>;
   }
   crearUsuarios(usuario: Usuario) {
-    return this.usuariosRef.doc(usuario.email).set({...usuario})
+    return this.usuariosRef.doc(usuario.email).set({ ...usuario });
   }
   obtenerUsuarios() {
     return this.usuariosRef.valueChanges() as Observable<Usuario[]>;
@@ -31,5 +32,25 @@ export class UsuarioService {
   modificarEstadoEspecialista(email: string, accion: boolean) {
     const currentUsuario = this.db.doc(`usuarios/${email}`);
     return currentUsuario.update({ aprobado: accion });
+  }
+  actualizarDisponibilidadHorariaEspecialista(
+    email: string,
+    especialidad: Especialidad
+  ) {
+    let especialidadesDB: Especialidad[] = [];
+    const currentUsuario = this.db.doc<Especialista>(`usuarios/${email}`);
+    currentUsuario.valueChanges().subscribe((user) => {
+      especialidadesDB = [];
+      especialidadesDB.push(...user?.especialidad!);
+    });
+    setTimeout(() => {
+      for (const especialidadDB of especialidadesDB) {
+        if (especialidadDB.detalle == especialidad.detalle) {
+          especialidadDB.horarioaDesde = especialidad.horarioaDesde;
+          especialidadDB.horariosHasta = especialidad.horariosHasta;
+        }
+      }
+      return currentUsuario.update({ especialidad: especialidadesDB });
+    }, 500);
   }
 }

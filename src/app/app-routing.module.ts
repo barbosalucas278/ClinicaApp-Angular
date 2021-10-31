@@ -3,7 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccesosGuard } from './modules/auth/services/auth/guards/accesos.guard';
 import { HomeComponent } from './modules/view/home/home/home.component';
 import { ErrorPageComponent } from './modules/view/layout/error-page/error-page.component';
-import { canActivate, customClaims, hasCustomClaim, redirectUnauthorizedTo} from '@angular/fire/compat/auth-guard';
+import {
+  canActivate,
+  customClaims,
+  hasCustomClaim,
+  redirectUnauthorizedTo,
+} from '@angular/fire/compat/auth-guard';
+import { SoloArministradoresGuard } from './modules/auth/services/auth/guards/solo-arministradores.guard';
 
 const routes: Routes = [
   {
@@ -14,7 +20,7 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate:[AccesosGuard]
+    canActivate: [AccesosGuard],
   },
   {
     path: 'auth',
@@ -24,7 +30,18 @@ const routes: Routes = [
   {
     path: 'administracion',
     loadChildren: () =>
-      import('./modules/view/administracion/administracion.module').then((m) => m.AdministracionModule),
+      import('./modules/view/administracion/administracion.module').then(
+        (m) => m.AdministracionModule
+      ),
+    canActivate: [AccesosGuard, SoloArministradoresGuard],
+  },
+  {
+    path: 'clinica',
+    loadChildren: () =>
+      import('./modules/view/clinica/clinica.module').then(
+        (m) => m.ClinicaModule
+      ),
+    canActivate: [AccesosGuard],
   },
   {
     path: '**',

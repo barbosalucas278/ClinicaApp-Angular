@@ -47,7 +47,6 @@ export class AuthService {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then(async (user) => {
-        console.log(user);
 
         if (user == null) {
           throw new Error('El email o la contraseña son incorrectas');
@@ -58,8 +57,10 @@ export class AuthService {
         }
         //Excluvio de proyecto clinica
         const token = await user.user.getIdTokenResult();
+        console.log(token.claims['especialista']);
+        console.log(token);
+        
         if (token.claims['especialista'] && !token.claims['aprobado']) {
-          this.logout();
           throw new Error(
             'Su cuenta debe ser aprobada por un Administrador para poder ingresar'
           );
@@ -142,6 +143,8 @@ export class AuthService {
       fnAdministrador({ email: email, accion: accion })
         .toPromise()
         .then((res) => {
+          console.log(res);
+          
           this.usuariosService.modificarEstadoEspecialista(email, accion);
         })
         .catch((error) => {
