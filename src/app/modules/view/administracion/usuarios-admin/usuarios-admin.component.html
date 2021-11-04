@@ -1,4 +1,4 @@
-<div class="row mt-1">
+<div class="row mt-1" *ngIf="!showAltaTurno">
   <div class="col-12">
     <button
       class="btn btn-info ms-3 me-3"
@@ -41,7 +41,7 @@
   <app-register *ngIf="showRegistrar" [adminPanel]="true"></app-register>
 </div>
 <table
-  *ngIf="tablaActiva == 'paciente' && !showRegistrar"
+  *ngIf="tablaActiva == 'paciente' && !showRegistrar && !showAltaTurno"
   class="table"
   id="tabla-pacientes"
 >
@@ -55,17 +55,29 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user of usuariosFiltrados">
+    <tr *ngFor="let user of usuariosFiltrados; let i = index">
       <td>{{ user.nombre }}</td>
       <td>{{ user.apellido }}</td>
       <td>{{ user.dni }}</td>
       <td>{{ user.obraSocial }}</td>
-      <th scope="row">1</th>
+      <th scope="row">
+        <button
+          (click)="onAgregarTurno(user)"
+          class="btn btn-sm p-0"
+        >
+          <i
+            id="{{ i }}BtnAgregarTurno"
+            class="bi bi-plus-square-fill"
+            title="Agregar turno"
+            style="color: green; font-size: 24px"
+          ></i>
+        </button>
+      </th>
     </tr>
   </tbody>
 </table>
 <table
-  *ngIf="tablaActiva == 'especialista' && !showRegistrar"
+  *ngIf="tablaActiva == 'especialista' && !showRegistrar && !showAltaTurno"
   class="table"
   id="tabla-especialistas"
 >
@@ -117,7 +129,7 @@
   </tbody>
 </table>
 <table
-  *ngIf="tablaActiva == 'administrador' && !showRegistrar"
+  *ngIf="tablaActiva == 'administrador' && !showRegistrar && !showAltaTurno"
   class="table"
   id="tabla-administradores"
 >
@@ -138,3 +150,18 @@
     </tr>
   </tbody>
 </table>
+
+<div class="row justify-content-center">
+  <app-alta-turno
+    [emailPacienteInput]="emailPaciente"
+    *ngIf="showAltaTurno"
+    (procesoDeAltaTerminado)="onProcesoDeAltaTerminado()"
+  ></app-alta-turno>
+  <button
+    *ngIf="showAltaTurno"
+    class="btn btn-danger col-4 mt-3"
+    (click)="cancelarAgregarTurno()"
+  >
+    Cancelar
+  </button>
+</div>

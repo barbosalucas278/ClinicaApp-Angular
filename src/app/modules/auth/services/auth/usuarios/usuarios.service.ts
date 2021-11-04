@@ -23,6 +23,12 @@ export class UsuarioService {
     );
     return currentUsuario.valueChanges() as Observable<Usuario[]>;
   }
+  obtenerEspecialistas() {
+    const currentUsuario = this.db.collection('usuarios', (ref) =>
+      ref.where('tipoUsuario', '==', `especialista`).where('aprobado', '==', true)
+    );
+    return currentUsuario.valueChanges() as Observable<Especialista[]>;
+  }
   crearUsuarios(usuario: Usuario) {
     return this.usuariosRef.doc(usuario.email).set({ ...usuario });
   }

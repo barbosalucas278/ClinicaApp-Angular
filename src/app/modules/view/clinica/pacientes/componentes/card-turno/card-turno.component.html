@@ -1,0 +1,299 @@
+<div class="card">
+  <div class="card-body">
+    <h3 class="card-title text-end">
+      <span [appBackgroundEstado]="turno.estado!">
+        Estado: {{ turno.estado }}
+      </span>
+    </h3>
+    <h3 class="card-title">Dia: {{ turno.dia }}</h3>
+    <h3 class="card-title">Horario: {{ turno.horario }}</h3>
+    <p class="card-text">Especialidad: {{ turno.especialidad }}</p>
+    <p class="card-text">Especialista: {{ turno.email_especialista }}</p>
+    <div class="row">
+      <button
+        *ngIf="
+          turno.estado! != 'tomado' &&
+          turno.estado! != 'cancelado' &&
+          turno.estado! != 'finalizado'
+        "
+        class="btn btn-danger mb-2"
+        data-bs-toggle="modal"
+        data-bs-target="#CancelarModal"
+      >
+        Cancelar Turno
+      </button>
+      <button
+        *ngIf="turno.resenia!.length > 0"
+        class="btn btn-info mb-2"
+        data-bs-toggle="modal"
+        data-bs-target="#reseniaModal"
+      >
+        Ver Reseña
+      </button>
+      <button
+        *ngIf="
+          turno.estado == 'finalizado' &&
+          turno.resenia!.length > 0 &&
+          !turno.encuesta!
+        "
+        class="btn btn-info mb-2"
+        data-bs-toggle="modal"
+        data-bs-target="#encuestaModal"
+      >
+        Completar Encuesta
+      </button>
+      <button
+        *ngIf="turno.estado == 'finalizado' && !turno.calificacion"
+        class="btn btn-info mb-2"
+        data-bs-toggle="modal"
+        data-bs-target="#calificacionModal"
+      >
+        Calificar Atención
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Cancelar -->
+<div
+  class="modal fade"
+  id="CancelarModal"
+  tabindex="-1"
+  aria-labelledby="CancelarModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="CancelarModalLabel">Cancelar Turno</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h4>Dejar Comentario</h4>
+        <textarea
+          [(ngModel)]="resenia.comentario"
+          maxlength="300"
+          class="form-control"
+          name="comentario"
+          cols="60"
+          rows="5"
+          style="max-height: 130px"
+        ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="onCancelarModalCancelar()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onCancelarturno(turno.id_turno!)"
+          data-bs-dismiss="modal"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Cancelar END -->
+<!-- Modal encuesta -->
+<div
+  class="modal fade"
+  id="encuestaModal"
+  tabindex="-1"
+  aria-labelledby="encuestaModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="encuestaModalLabel">Encuesta</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h4>¿Cómo te pareció el sistema de turno de la clínica?</h4>
+        <textarea
+          [(ngModel)]="encuesta.pregunta1"
+          maxlength="300"
+          class="form-control"
+          name="encuesta"
+          cols="60"
+          rows="5"
+          style="max-height: 130px"
+        ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="onCancelarModalCancelar()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onEnviarEncuesta(turno.id_turno!)"
+          data-bs-dismiss="modal"
+        >
+          Enviar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal encuesta END -->
+<!-- Modal ver reseña -->
+<div
+  *ngIf="turno.resenia!.length > 0"
+  class="modal fade"
+  id="reseniaModal"
+  tabindex="-1"
+  aria-labelledby="reseniaModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reseniaModalLabel">Comentario</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          {{ turno.resenia![0].comentario }}
+        </p>
+        <p>Motivo: {{ turno.resenia![0].motivo }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal ver reseña END -->
+
+<!-- Modal calificar -->
+<div
+  class="modal fade"
+  id="calificacionModal"
+  tabindex="-1"
+  aria-labelledby="calificacionModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="calificacionModalLabel">Encuesta</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h4>¿Cómo califica la atención?</h4>
+        <div class="row">
+          <div class="form-check form-check-inline">
+            <input
+              [(ngModel)]="calificacion"
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions"
+              id="inlineRadio1"
+              value="Pésima"
+            />
+            <label class="form-check-label" for="inlineRadio1">Pésima</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              [(ngModel)]="calificacion"
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions"
+              id="inlineRadio2"
+              value="Mala"
+            />
+            <label class="form-check-label" for="inlineRadio2">Mala</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              [(ngModel)]="calificacion"
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions"
+              id="inlineRadio3"
+              value="Aceptable"
+            />
+            <label class="form-check-label" for="inlineRadio2">Aceptable</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              [(ngModel)]="calificacion"
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions"
+              id="inlineRadio4"
+              value="Muy Buena"
+            />
+            <label class="form-check-label" for="inlineRadio2">Muy Buena</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              [(ngModel)]="calificacion"
+              class="form-check-input"
+              type="radio"
+              name="inlineRadioOptions"
+              id="inlineRadio5"
+              value="Excelente"
+            />
+            <label class="form-check-label" for="inlineRadio2">Excelente</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="onCancelarModalCancelar()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onEnviarCalificacion(turno.id_turno!)"
+          data-bs-dismiss="modal"
+        >
+          Enviar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal calificar END -->

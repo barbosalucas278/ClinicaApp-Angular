@@ -5,26 +5,25 @@ import { UsuarioService } from 'src/app/modules/auth/services/auth/usuarios/usua
 import { Administrador } from 'src/app/modules/clases/administrador';
 import { Especialista } from 'src/app/modules/clases/especialista';
 import { Paciente } from 'src/app/modules/clases/paciente';
-import { Usuario } from 'src/app/modules/clases/usuario';
 
 @Component({
-  selector: 'app-mi-perfil',
-  templateUrl: './mi-perfil.component.html',
-  styleUrls: ['./mi-perfil.component.scss'],
+  selector: 'app-mis-turnos',
+  templateUrl: './mis-turnos.component.html',
+  styleUrls: ['./mis-turnos.component.scss'],
 })
-export class MiPerfilComponent implements OnInit {
+export class MisTurnosComponent implements OnInit {
+  showAltaTurno: boolean = false;
+  showMisTurnos: boolean;
+  mostrarSpinner: boolean;
   currentUser: any;
-  showMisHorarios: boolean;
-  showMiPerfil: boolean;
   constructor(
-    private usuariosService: UsuarioService,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UsuarioService
   ) {
-    this.showMisHorarios = false;
-    this.showMiPerfil = true;
     this.currentUser = {};
+    this.mostrarSpinner = true;
     setTimeout(() => {
-      this.usuariosService
+      this.userService
         .obtenerCurrentUsuario(this.authService.currentUser.email)
         .pipe(
           map<any, any>((user) => {
@@ -84,15 +83,25 @@ export class MiPerfilComponent implements OnInit {
           this.currentUser.tipoUsuario = current.tipoUsuario;
         });
     }, 800);
+    this.mostrarSpinner = false;
+    this.showMisTurnos = true;
   }
 
   ngOnInit(): void {}
-  onShowMisHorarios() {
-    this.showMiPerfil = false;
-    this.showMisHorarios = true;
+  onShowAltaTurno() {
+    this.mostrarSpinner = true;
+    setTimeout(() => {
+      this.showMisTurnos = false;
+      this.mostrarSpinner = false;
+      this.showAltaTurno = true;
+    }, 1000);
   }
-  onShowMiPerfil() {
-    this.showMisHorarios = false;
-    this.showMiPerfil = true;
+  onShowMisTurnos() {
+    this.mostrarSpinner = true;
+    setTimeout(() => {
+      this.mostrarSpinner = false;
+      this.showAltaTurno = false;
+      this.showMisTurnos = true;
+    }, 1000);
   }
 }

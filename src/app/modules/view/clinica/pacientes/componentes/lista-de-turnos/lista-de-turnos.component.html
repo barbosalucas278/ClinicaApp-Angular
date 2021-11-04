@@ -1,0 +1,7 @@
+<div class="row mt-4" *ngIf="turnosPaciente.length > 0">
+  <app-card-turno
+    *ngFor="let turno of turnosPaciente"
+    [turno]="turno"
+    class="col-4 mb-3"
+  ></app-card-turno>
+</div>

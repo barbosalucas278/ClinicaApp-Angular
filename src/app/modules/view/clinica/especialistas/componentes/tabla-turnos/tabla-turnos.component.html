@@ -1,0 +1,190 @@
+<div class="container py-4">
+  <header class="pb-3 mb-4 border-bottom">
+    <h2>
+      <a class="d-flex align-items-center text-dark text-decoration-none">
+        Turnos
+      </a>
+    </h2>
+  </header>
+  <table class="table" id="tabla-turnos">
+    <thead>
+      <tr>
+        <th scope="col">Dia</th>
+        <th scope="col">Horario</th>
+        <th scope="col">Paciente</th>
+        <th scope="col">Especialidad</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let turno of turnos; let i = index">
+        <td>{{ turno.dia }}</td>
+        <td>{{ turno.horario }}</td>
+        <td>{{ turno.email_paciente }}</td>
+        <td>{{ turno.especialidad }}</td>
+        <td>
+          <h4>
+            <span [appBackgroundEstado]="turno.estado!">
+              {{ turno.estado }}
+            </span>
+          </h4>
+        </td>
+        <th scope="row">
+          <button
+            class="btn btn-sm p-0"
+            *ngIf="turno.estado == 'pendiente'"
+            (click)="onBtnCancelar(turno)"
+            data-bs-toggle="modal"
+            data-bs-target="#CancelarModal"
+          >
+            <i
+              id="{{ i }}BtnCancelarTurno"
+              class="bi bi-x-square-fill"
+              title="Cancelar"
+              style="color: red; font-size: 24px"
+            ></i>
+          </button>
+          <button
+            class="btn btn-sm p-0"
+            *ngIf="turno.estado == 'pendiente' && !adminPanel"
+            (click)="onAceptarTurno(turno)"
+          >
+            <i
+              id="{{ i }}BtnAceptarTurno"
+              class="bi bi-check-square-fill"
+              title="Aceptar"
+              style="color: green; font-size: 24px"
+            ></i>
+          </button>
+          <button
+            class="btn btn-sm p-0"
+            *ngIf="turno.estado == 'aceptado' && !adminPanel"
+            (click)="onRechazarTurno(turno)"
+          >
+            <i
+              id="{{ i }}BtnRechazarTurno"
+              class="bi bi-x-square-fill"
+              title="Rechazar"
+              style="color: yellow; font-size: 24px"
+            ></i>
+          </button>
+          <button
+            class="btn btn-sm p-0"
+            *ngIf="turno.estado == 'tomado' && !adminPanel"
+            (click)="onFinalizarTurno(turno)"
+          >
+            <i
+              id="{{ i }}BtnFinalizarTurno"
+              class="bi bi bi-x-square-fill"
+              title="Finalizar"
+              style="color: green; font-size: 24px"
+            ></i>
+          </button>
+          <button
+            class="btn btn-sm p-0"
+            *ngIf="turno.resenia && !adminPanel && turno.resenia!.length > 0"
+            (click)="onVerResenia(turno, $event)"
+            data-bs-toggle="modal"
+            data-bs-target="#reseniaModal"
+          >
+            <i
+              id="{{ i }}BtnVerResenia"
+              class="bi bi-file-text-fill"
+              title="Reseña"
+              style="color: black; font-size: 24px"
+            ></i>
+          </button>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- Modal Cancelar -->
+<div
+  class="modal fade"
+  id="CancelarModal"
+  tabindex="-1"
+  aria-labelledby="CancelarModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="CancelarModalLabel">Cancelar Turno</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h4>Dejar Comentario</h4>
+        <textarea
+          [(ngModel)]="resenia.comentario"
+          maxlength="300"
+          class="form-control"
+          name="comentario"
+          cols="60"
+          rows="5"
+          style="max-height: 130px"
+        ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="onCancelarModalCancelar()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onCancelarTurno()"
+          data-bs-dismiss="modal"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Cancelar END -->
+<!-- Modal ver reseña -->
+<div
+  *ngIf="!adminPanel"
+  class="modal fade"
+  id="reseniaModal"
+  tabindex="-1"
+  aria-labelledby="reseniaModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reseniaModalLabel">Comentario</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          {{ resenia.comentario }}
+        </p>
+        <p>Motivo: {{ resenia.motivo }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal ver reseña END -->

@@ -1,0 +1,267 @@
+<form [formGroup]="formularioTurno" (ngSubmit)="onSubmit()" class="col-12">
+  <div class="row justify-content-around">
+    <div class="col-5">
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="nombre">Especialidad</label>
+        <input
+          formControlName="especialidad"
+          type="text"
+          class="form-control form-control-sm"
+          id="especialidad"
+          name="especialidad"
+          autocomplete="off"
+        />
+        <div>
+          <h1 class="m-0 ms-3 p-0">
+            <i
+              class="bi bi-plus-circle-fill text-success"
+              data-bs-toggle="modal"
+              data-bs-target="#modalEspecialidades"
+            ></i>
+          </h1>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <label for="email" class="input-group-text">Especialista</label>
+        <input
+          formControlName="especialista"
+          type="text"
+          class="form-control"
+          id="Especialista"
+          name="Especialista"
+          autocomplete="off"
+        />
+        <div *ngIf="showAddEspecialista">
+          <h1 class="m-0 ms-3 p-0">
+            <i
+              class="bi bi-plus-circle-fill text-success"
+              data-bs-toggle="modal"
+              data-bs-target="#modalEspecialistas"
+            ></i>
+          </h1>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <label for="password" class="input-group-text">Dia</label>
+        <input
+          formControlName="dia"
+          type="text"
+          class="form-control"
+          id="dia"
+          name="dia"
+          autocomplete="off"
+        />
+        <div *ngIf="showAddDia">
+          <h1 class="m-0 ms-3 p-0">
+            <i
+              *ngIf="formularioTurno.controls['dia'].value"
+              class="bi bi-plus-circle-fill text-success"
+              data-bs-toggle="modal"
+              data-bs-target="#modalDias"
+            ></i>
+            <i
+              *ngIf="!formularioTurno.controls['dia'].value"
+              class="bi bi-plus-circle-fill text-success"
+              data-bs-toggle="modal"
+              data-bs-target="#modalDias"
+            ></i>
+          </h1>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <label for="horario" class="input-group-text">Horario</label>
+        <input
+          formControlName="horario"
+          type="text"
+          class="form-control"
+          id="horario"
+          name="horario"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+    <div class="row justify-content-around">
+      <button
+        type="submit"
+        class="btn btn-success btn-lg col-4"
+        [disabled]="!checkForm"
+      >
+        Solicitar
+      </button>
+      <div class="alert mt-3" [ngClass]="tipoAlerta" role="alert" *ngIf="mostrarMensaje">
+        <small>{{ mensaje }}</small>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Modal Especialidades Start -->
+<div
+  class="modal fade"
+  id="modalEspecialidades"
+  tabindex="-1"
+  aria-labelledby="modalEspecialidadesLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEspecialidadesLabel">
+          Eliga la especialidad
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-between">
+          <div
+            class="col-2"
+            *ngFor="let especialidad of especialidadesDisponibles"
+          >
+            <button
+              class="text-center btn"
+              (click)="onEspecialidadSeleccionada(especialidad)"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <img
+                [src]="especialidad.urlImg!"
+                class="contenedor-rectangular"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Especialidades END -->
+<!-- Modal Especialistas Start -->
+<div
+  class="modal fade"
+  id="modalEspecialistas"
+  tabindex="-1"
+  aria-labelledby="modalEspecialistasLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEspecialistasLabel">
+          Eliga El especialista
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-around">
+          <div
+            class="col-2"
+            *ngFor="let especialista of especialistasFiltrados"
+          >
+            <button
+              class="text-center btn contenedor-rectangular"
+              (click)="onEspecialistaSeleccionado(especialista)"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              {{ especialista.nombre }} {{ especialista.apellido }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Especialistas END -->
+
+<!-- Modal Dias  -->
+<div
+  class="modal fade"
+  id="modalDias"
+  tabindex="-1"
+  aria-labelledby="modalDiasLabel"
+  aria-hidden="true"
+  *ngIf="showAddDia"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalDiasLabel">
+          Eliga el día y el horario:
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-between">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <th class="text-center">Dia</th>
+                <th class="text-center">Horarios</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dia of matrizTurnosDisponibles | keyvalue">
+                  <td>
+                    <button
+                      class="btn btn-matriz me-4 fw-bold btn-outline-success"
+                      disabled
+                    >
+                      {{ dia.key }}
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      *ngFor="
+                        let horario of dia.value | horariosDisponibles: turno
+                      "
+                      class="text-center btn btn-matriz btn-success me-2"
+                      (click)="onDiaSeleccionado(dia.key, horario)"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      {{ horario }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Dias END -->

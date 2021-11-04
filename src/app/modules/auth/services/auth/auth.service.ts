@@ -57,8 +57,6 @@ export class AuthService {
         }
         //Excluvio de proyecto clinica
         const token = await user.user.getIdTokenResult();
-        console.log(token.claims['especialista']);
-        console.log(token);
         
         if (token.claims['especialista'] && !token.claims['aprobado']) {
           throw new Error(

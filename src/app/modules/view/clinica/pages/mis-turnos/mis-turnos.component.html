@@ -1,0 +1,38 @@
+<div class="row justify-content-end mt-3 me-0">
+  <div
+    class="col-3"
+    *ngIf="showMisTurnos && currentUser.tipoUsuario! == 'paciente'"
+  >
+    <button class="btn btn-success" (click)="onShowAltaTurno()">
+      Solicitar Turno
+    </button>
+  </div>
+  <div class="col-3" *ngIf="!showMisTurnos  && currentUser.tipoUsuario! == 'paciente'">
+    <button class="btn btn-warning" (click)="onShowMisTurnos()">
+      Volver a Mis Turnos
+    </button>
+  </div>
+</div>
+<div class="container">
+  <div class="row justify-content-center">
+    <spinner *ngIf="mostrarSpinner" class="text-center"></spinner>
+    <app-alta-turno
+      *ngIf="showAltaTurno && !mostrarSpinner"
+      (procesoDeAltaTerminado)="onShowMisTurnos()"
+    ></app-alta-turno>
+    <app-lista-de-turnos
+      *ngIf="
+        showMisTurnos &&
+        !mostrarSpinner &&
+        currentUser.tipoUsuario! == 'paciente'
+      "
+    ></app-lista-de-turnos>
+    <app-tabla-turnos
+      *ngIf="
+        showMisTurnos &&
+        !mostrarSpinner &&
+        currentUser.tipoUsuario! == 'especialista'
+      "
+    ></app-tabla-turnos>
+  </div>
+</div>

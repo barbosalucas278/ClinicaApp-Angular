@@ -6,15 +6,21 @@ import { UsuariosAdminComponent } from './usuarios-admin/usuarios-admin.componen
 import { ComponentesGenericosModule } from '../../componentes-genericos/componentes-genericos.module';
 import { AuthModule } from '../../auth/auth.module';
 import { PipesModule } from '../../pipes/pipes.module';
+import { TurnosAdminComponent } from './turnos-admin/turnos-admin.component';
+import { TablaTurnosComponent } from '../clinica/especialistas/componentes/tabla-turnos/tabla-turnos.component';
+import { ClinicaModule } from '../clinica/clinica.module';
+import { DirectivasModule } from '../../directivas/directivas.module';
 
 @NgModule({
-  declarations: [UsuariosAdminComponent],
+  declarations: [UsuariosAdminComponent, TurnosAdminComponent],
   imports: [
     CommonModule,
     AdministracionRoutingModule,
     ComponentesGenericosModule,
     AuthModule,
-    PipesModule
+    PipesModule,
+    ClinicaModule,
+    DirectivasModule,
   ],
 })
 export class AdministracionModule {}

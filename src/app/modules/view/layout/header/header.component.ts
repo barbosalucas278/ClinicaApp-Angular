@@ -31,28 +31,25 @@ export class HeaderComponent implements OnInit {
       //si recien entra, que tarde 1 seg mas(tiempo que transcurre en el guard para no leer datos null)
       //que cuando deslogea
       if (condition) {
-        setTimeout(() => {
-          this.userService
-            .obtenerCurrentUsuario(this.authService.currentUser?.email!)
-            .subscribe((userData) => {
-              this.userData = userData[0];
-              // console.log(userData[0]);
-              
-            });
+        setTimeout(async () => {
           this.userHasLogged = condition;
+          const token = await this.authService.currentUser.getIdTokenResult();
+          if (token.claims['especialista']) {
+            this.userData = { tipoUsuario: 'especialista' };
+          } else if (token.claims['administrador']) {
+            this.userData = { tipoUsuario: 'administrador' };
+          } else if (token.claims['paciente']) {
+            this.userData = { tipoUsuario: 'paciente' };
+          }
         }, 1000);
       } else {
-        setTimeout(() => {
-          this.userHasLogged = condition;
-        }, 1000);
+        this.userHasLogged = condition;
       }
     });
   }
   onLogout() {
     this.authService.logout().then(() => {
-      setTimeout(() => {
-        this.router.navigate(['auth']);
-      }, 500);
+      this.router.navigate(['auth']);
     });
   }
   onUsuarios() {
@@ -60,9 +57,19 @@ export class HeaderComponent implements OnInit {
       this.router.navigate(['administracion/usuarios']);
     }, 500);
   }
+  onTurnos() {
+    setTimeout(() => {
+      this.router.navigate(['administracion/turnos']);
+    }, 500);
+  }
   onMiPerfil() {
     setTimeout(() => {
       this.router.navigate(['clinica/miperfil']);
+    }, 500);
+  }
+  onMisTurnos() {
+    setTimeout(() => {
+      this.router.navigate(['clinica/misturnos']);
     }, 500);
   }
 }

@@ -3,7 +3,10 @@
     <a (click)="onShowMiPerfil()">
       <span class="fs-4 me-5">Mi Perfil</span>
     </a>
-    <a (click)="onShowMisHorarios()">
+    <a
+      (click)="onShowMisHorarios()"
+      *ngIf="currentUser.tipoUsuario == 'especialista'"
+    >
       <span class="fs-4">Mis Horarios</span>
     </a>
   </header>
