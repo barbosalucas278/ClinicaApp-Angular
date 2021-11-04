@@ -66,7 +66,7 @@ export class StorageService {
     const turnosFiltrados = this.db.collection('turnos', (ref) =>
       ref
         .where('email_especialista', '==', `${emailEspecialialista}`)
-        .orderBy('dia', 'desc')
+
     );
     return turnosFiltrados.valueChanges() as Observable<Turno[]>;
   }
@@ -89,7 +89,6 @@ export class StorageService {
     const turnosFiltrados = this.db.collection('turnos', (ref) =>
       ref
         .where('email_paciente', '==', `${emailPaciente}`)
-        .orderBy('dia', 'desc')
     );
     return turnosFiltrados.valueChanges() as Observable<Turno[]>;
   }
