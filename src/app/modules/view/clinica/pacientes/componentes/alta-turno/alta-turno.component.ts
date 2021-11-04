@@ -6,6 +6,7 @@ import { UsuarioService } from 'src/app/modules/auth/services/auth/usuarios/usua
 import { StorageService } from 'src/app/modules/auth/services/storage/storage.service';
 import { Especialidad } from 'src/app/modules/clases/especialidad';
 import { Especialista } from 'src/app/modules/clases/especialista';
+import { Paciente } from 'src/app/modules/clases/paciente';
 import { Estados, Turno } from 'src/app/modules/clases/turno';
 
 @Component({
@@ -15,7 +16,10 @@ import { Estados, Turno } from 'src/app/modules/clases/turno';
 })
 export class AltaTurnoComponent implements OnInit {
   @Input() emailPacienteInput?: string;
+  @Input() nombrePacienteInput?: string;
   @Output() procesoDeAltaTerminado: EventEmitter<boolean> = new EventEmitter();
+
+  currentPaciente: Paciente = { tipoUsuario: 'paciente' };
   especialidadesDisponibles: Especialidad[] = [];
   especialistasDisponibles: Especialista[] = [];
   especialistasFiltrados: Especialista[] = [];
@@ -50,6 +54,9 @@ export class AltaTurnoComponent implements OnInit {
     this.cargarEspecialidades();
     this.cargarEspecialistas();
     this.cargarUltimoIdTurno();
+    this.usuariosServices
+      .obtenerCurrentUsuario(this.authService.currentUser.email)
+      .subscribe((U) => (this.currentPaciente = U[0]));
   }
   cargarEspecialidades() {
     this.storageService.getEspecialidades().subscribe((E) => {
@@ -100,7 +107,7 @@ export class AltaTurnoComponent implements OnInit {
     );
 
     this.turno.email_especialista = especialistaSeleccionado.email;
-
+    this.turno.nombre_especialista = `${especialistaSeleccionado.nombre}, ${especialistaSeleccionado.apellido}`;
     this.storageService
       .getTurnosByEspecialidad(
         especialistaSeleccionado.email!,
@@ -197,9 +204,13 @@ export class AltaTurnoComponent implements OnInit {
     const emailPaciente = this.emailPacienteInput
       ? this.emailPacienteInput
       : this.authService.currentUser.email;
+    const nombrePacienteStorage = `${this.currentPaciente.nombre}, ${this.currentPaciente.apellido}`;
+    const nombrePaciente = this.nombrePacienteInput
+      ? this.nombrePacienteInput
+      : nombrePacienteStorage;
     this.turno.email_paciente = emailPaciente;
     this.turno.estado = Estados.Pendiente;
-
+    this.turno.nombre_paciente = nombrePaciente;
     this.turno.id_turno = this.ultimoId + 1;
     this.storageService
       .createTurno(this.turno)

@@ -13,6 +13,7 @@ import { Estados, Turno } from 'src/app/modules/clases/turno';
 export class TablaTurnosComponent implements OnInit {
   @Input() adminPanel: boolean;
   turnos: Turno[] = [];
+  turnosFiltrados: Turno[] = [];
   resenia: Resenia = {};
   id_turnoActivo: number = 0;
   suscripcionEspecialista: Subscription;
@@ -27,6 +28,9 @@ export class TablaTurnosComponent implements OnInit {
       .subscribe((T) => {
         this.turnos = [];
         this.turnos.push(...T);
+        if (this.turnosFiltrados.length == 0) {
+          this.turnosFiltrados = this.turnos;
+        }
       });
   }
   onBtnCancelar(turno: Turno) {
@@ -66,13 +70,43 @@ export class TablaTurnosComponent implements OnInit {
     this.resenia.comentario = turno.resenia![0].comentario;
     this.resenia.motivo = turno.resenia![0].motivo;
   }
+  onChangeBusqueda($event: any) {
+    let palabraClave: string = $event.target.value;
+    if (palabraClave != '') {
+      for (let index = 0; index < palabraClave.length; index++) {
+        if (index == 0) {
+          const arr = palabraClave.split('');
+          arr[0] = palabraClave[index].toUpperCase();
+          palabraClave = arr.join('');
+        }
+      }
+      if (this.adminPanel) {
+        this.turnosFiltrados = this.turnos.filter(
+          (T) =>
+            T.especialidad?.startsWith(palabraClave) ||
+            T.nombre_especialista?.startsWith(palabraClave)
+        );
+      } else {
+        this.turnosFiltrados = this.turnos.filter(
+          (T) =>
+            T.especialidad?.startsWith(palabraClave) ||
+            T.nombre_paciente?.startsWith(palabraClave)
+        );
+      }
+    } else {
+      this.turnosFiltrados = this.turnos;
+    }
+  }
+
   ngOnInit(): void {
     if (this.adminPanel) {
       this.suscripcionEspecialista.unsubscribe();
-      console.log('this.turnos');
       this.storageService.getTurnos().subscribe((T) => {
         this.turnos = [];
         this.turnos.push(...T);
+        if (this.turnosFiltrados.length == 0) {
+          this.turnosFiltrados = this.turnos;
+        }
       });
     }
   }

@@ -10,6 +10,7 @@ import { Turno } from 'src/app/modules/clases/turno';
 })
 export class ListaDeTurnosComponent implements OnInit {
   turnosPaciente: Turno[] = [];
+  turnosFiltrados: Turno[] = [];
   constructor(
     private storageService: StorageService,
     private authService: AuthService
@@ -19,9 +20,31 @@ export class ListaDeTurnosComponent implements OnInit {
       .subscribe((T) => {
         setTimeout(() => {
           this.turnosPaciente = T;
+          if (this.turnosFiltrados.length == 0) {
+            this.turnosFiltrados = this.turnosPaciente;
+          }
         }, 500);
       });
   }
+  onChangeBusqueda($event: any) {
+    let palabraClave: string = $event.target.value;
+    if (palabraClave != '') {
+      for (let index = 0; index < palabraClave.length; index++) {
+        if (index == 0) {
+          const arr = palabraClave.split('');
+          arr[0] = palabraClave[index].toUpperCase();
+          palabraClave = arr.join('');
+        }
+      }
 
+      this.turnosFiltrados = this.turnosPaciente.filter(
+        (T) =>
+          T.especialidad?.startsWith(palabraClave) ||
+          T.nombre_especialista?.startsWith(palabraClave)
+      );
+    } else {
+      this.turnosFiltrados = this.turnosPaciente;
+    }
+  }
   ngOnInit(): void {}
 }

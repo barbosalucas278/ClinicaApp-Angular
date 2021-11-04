@@ -10,6 +10,7 @@ import { Paciente } from 'src/app/modules/clases/paciente';
 })
 export class UsuariosAdminComponent implements OnInit {
   emailPaciente: string;
+  nombrePaciente: string;
   mostrarSpinner: boolean;
   showAltaTurno: boolean;
   usuarios: any[];
@@ -27,6 +28,7 @@ export class UsuariosAdminComponent implements OnInit {
     this.usuariosFiltrados = [];
     this.tablaActiva = '';
     this.emailPaciente = '';
+    this.nombrePaciente = '';
   }
 
   ngOnInit(): void {
@@ -90,6 +92,8 @@ export class UsuariosAdminComponent implements OnInit {
     }, 1000);
   }
   onAgregarTurno(paciente: Paciente) {
+    this.emailPaciente = paciente.email!;
+    this.nombrePaciente = `${paciente.nombre}, ${paciente.apellido}`;
     this.showAltaTurno = true;
   }
   onProcesoDeAltaTerminado() {

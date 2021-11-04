@@ -1,6 +1,19 @@
 <div class="row mt-4" *ngIf="turnosPaciente.length > 0">
+  <div class="container-fluid mb-5">
+    <div class="row">
+      <div class="col-6">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Buscar por especialidad o especialista"
+          aria-label="Search"
+          (keyup)="onChangeBusqueda($event)"
+        />
+      </div>
+    </div>
+  </div>
   <app-card-turno
-    *ngFor="let turno of turnosPaciente"
+    *ngFor="let turno of turnosFiltrados"
     [turno]="turno"
     class="col-4 mb-3"
   ></app-card-turno>

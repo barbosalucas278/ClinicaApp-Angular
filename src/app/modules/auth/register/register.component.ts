@@ -251,7 +251,7 @@ export class RegisterComponent implements OnInit {
     this.formularioPaciente.reset();
   }
   onVolverSeleccionTipuUsuario() {
-    console.log(this.formReCaptcha);
+    // console.log(this.formReCaptcha);
     this.mostrarSpinner = true;
     this.tipoUsuario = '';
     this.resetFormulario();

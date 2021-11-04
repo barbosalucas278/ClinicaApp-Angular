@@ -141,7 +141,7 @@ export class AuthService {
       fnAdministrador({ email: email, accion: accion })
         .toPromise()
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           
           this.usuariosService.modificarEstadoEspecialista(email, accion);
         })

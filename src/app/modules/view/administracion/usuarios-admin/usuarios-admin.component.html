@@ -154,6 +154,7 @@
 <div class="row justify-content-center">
   <app-alta-turno
     [emailPacienteInput]="emailPaciente"
+    [nombrePacienteInput]="nombrePaciente"
     *ngIf="showAltaTurno"
     (procesoDeAltaTerminado)="onProcesoDeAltaTerminado()"
   ></app-alta-turno>

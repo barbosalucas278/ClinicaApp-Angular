@@ -7,7 +7,9 @@ export interface Turno {
   horario?: string;
   estado?: Estados;
   email_paciente?: string;
+  nombre_paciente?: string;
   email_especialista?: string;
+  nombre_especialista?: string;
   especialidad?: string;
   resenia?: Resenia[];
   encuesta?: Encuesta;
