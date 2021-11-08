@@ -17,6 +17,7 @@ export class TablaTurnosComponent implements OnInit {
   resenia: Resenia = {};
   id_turnoActivo: number = 0;
   suscripcionEspecialista: Subscription;
+  palabraClave: string = '';
   constructor(
     private storageService: StorageService,
     private authService: AuthService
@@ -30,6 +31,9 @@ export class TablaTurnosComponent implements OnInit {
         this.turnos.push(...T);
         if (this.turnosFiltrados.length == 0) {
           this.turnosFiltrados = this.turnos;
+        } else {
+          this.turnosFiltrados = this.turnos;
+          this.filtrarLosTurnos();
         }
       });
   }
@@ -71,41 +75,46 @@ export class TablaTurnosComponent implements OnInit {
     this.resenia.motivo = turno.resenia![0].motivo;
   }
   onChangeBusqueda($event: any) {
-    let palabraClave: string = $event.target.value;
-    if (palabraClave != '') {
-      for (let index = 0; index < palabraClave.length; index++) {
+    this.palabraClave = $event.target.value;
+    this.filtrarLosTurnos();
+  }
+  filtrarLosTurnos() {
+    if (this.palabraClave != '') {
+      for (let index = 0; index < this.palabraClave.length; index++) {
         if (index == 0) {
-          const arr = palabraClave.split('');
-          arr[0] = palabraClave[index].toUpperCase();
-          palabraClave = arr.join('');
+          const arr = this.palabraClave.split('');
+          arr[0] = this.palabraClave[index].toUpperCase();
+          this.palabraClave = arr.join('');
         }
       }
       if (this.adminPanel) {
         this.turnosFiltrados = this.turnos.filter(
           (T) =>
-            T.especialidad?.startsWith(palabraClave) ||
-            T.nombre_especialista?.startsWith(palabraClave)
+            T.especialidad?.startsWith(this.palabraClave) ||
+            T.nombre_especialista?.startsWith(this.palabraClave)
         );
       } else {
         this.turnosFiltrados = this.turnos.filter(
           (T) =>
-            T.especialidad?.startsWith(palabraClave) ||
-            T.nombre_paciente?.startsWith(palabraClave)
+            T.especialidad?.startsWith(this.palabraClave) ||
+            T.nombre_paciente?.startsWith(this.palabraClave)
         );
       }
     } else {
       this.turnosFiltrados = this.turnos;
     }
   }
-
   ngOnInit(): void {
     if (this.adminPanel) {
       this.suscripcionEspecialista.unsubscribe();
       this.storageService.getTurnos().subscribe((T) => {
         this.turnos = [];
-        this.turnos.push(...T);
+        this.turnos = T;
         if (this.turnosFiltrados.length == 0) {
           this.turnosFiltrados = this.turnos;
+        } else {
+          this.turnosFiltrados = this.turnos;
+          this.filtrarLosTurnos();
         }
       });
     }

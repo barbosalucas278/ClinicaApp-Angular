@@ -20,16 +20,26 @@ export class AltaTurnoComponent implements OnInit {
   @Output() procesoDeAltaTerminado: EventEmitter<boolean> = new EventEmitter();
 
   currentPaciente: Paciente = { tipoUsuario: 'paciente' };
+
   especialidadesDisponibles: Especialidad[] = [];
+  especialidadSeleccionada: Especialidad = {};
   especialistasDisponibles: Especialista[] = [];
   especialistasFiltrados: Especialista[] = [];
+  especialistaSeleccionado: Especialista = { tipoUsuario: 'especialista' };
+  noHayEspecialistas: boolean = false;
+
+  diaSeleccionado: string = '';
+  noHayDiasDisponibles: boolean = false;
+
+  horarioSeleccionado: string = '';
+  noHayHorariosDisponibles: boolean = false;
   turnosDisponiles: Turno[] = [];
   matrizTurnosDisponibles: Map<string, string[]> = new Map();
   showAddEspecialista: boolean;
   showAddDia: boolean;
   showAddHorario: boolean;
-  formularioTurno: FormGroup;
-  checkForm: boolean = false;
+  checkForm: boolean;
+
   turno: Turno = { resenia: [] };
   ultimoId: number = 0;
   mensaje: string = '';
@@ -44,13 +54,8 @@ export class AltaTurnoComponent implements OnInit {
     this.showAddEspecialista = false;
     this.showAddDia = false;
     this.showAddHorario = false;
-    this.formularioTurno = this.fb.group({
-      especialidad: ['', Validators.required],
-      especialista: ['', Validators.required],
-      dia: ['', Validators.required],
-      horario: ['', Validators.required],
-    });
-    this.disabledAllContorls();
+    this.checkForm = false;
+
     this.cargarEspecialidades();
     this.cargarEspecialistas();
     this.cargarUltimoIdTurno();
@@ -61,76 +66,157 @@ export class AltaTurnoComponent implements OnInit {
   cargarEspecialidades() {
     this.storageService.getEspecialidades().subscribe((E) => {
       setTimeout(() => {
-        this.especialidadesDisponibles.push(...E);
+        this.especialidadesDisponibles = [];
+        this.especialidadesDisponibles = E;
       }, 1000);
     });
   }
   cargarEspecialistas() {
     this.usuariosServices.obtenerEspecialistas().subscribe((E) => {
-      setTimeout(() => {
-        this.especialistasDisponibles.push(...E);
-      }, 1000);
+      this.especialistasDisponibles = [];
+      this.especialistasDisponibles = E;
     });
   }
 
-  disabledAllContorls() {
-    const controles = this.formularioTurno.controls;
-    for (const control in controles) {
-      if (Object.prototype.hasOwnProperty.call(controles, control)) {
-        const element = controles[control];
-        element.disable();
+  ngOnInit(): void {}
+  /**
+   * EventHandler de cuando el usuario selecicona una especialidad
+   * @param especialidad
+   * @param $event
+   */
+  onEspecialidadSeleccionada(especialidad: Especialidad, $event: any) {
+    if (
+      this.especialidadSeleccionada.detalle != undefined ||
+      this.especialistaSeleccionado.dni != undefined ||
+      this.diaSeleccionado != '' ||
+      this.horarioSeleccionado != ''
+    ) {
+      this.checkForm = false;
+      this.diaSeleccionado = '';
+      this.horarioSeleccionado = '';
+      this.especialistaSeleccionado = { tipoUsuario: 'especialista' };
+      this.especialidadSeleccionada = {};
+      this.showAddHorario = false;
+      this.showAddDia = false;
+      this.showAddEspecialista = false;
+      this.noHayHorariosDisponibles = false;
+      this.noHayDiasDisponibles = false;
+      this.noHayEspecialistas = false;
+      const botones =
+        $event.target.parentElement.parentNode.parentNode.children;
+      for (const boton of botones) {
+        if (boton.id != $event.target.parentElement.parentNode.id) {
+          boton.classList.remove('visually-hidden');
+        }
       }
+    } else {
+      this.especialidadSeleccionada = especialidad;
+      let espeFiltrados: Especialista[] = [];
+      let tieneLaEspecialidad = (e: Especialista) => {
+        let especialiadesCompletas = e.especialidad!;
+        let especialidades = especialiadesCompletas.map(
+          (espe) => espe.detalle!
+        );
+        let especialidadesFiltradas = especialidades!
+          .join(',')
+          .includes(this.especialidadSeleccionada.detalle!);
+        if (especialidadesFiltradas) {
+          return e;
+        }
+        return false;
+      };
+      espeFiltrados = this.especialistasDisponibles.filter((E) =>
+        tieneLaEspecialidad(E)
+      );
+      this.especialistasFiltrados = espeFiltrados;
+
+      if (espeFiltrados.length == 1) {
+        setTimeout(() => {
+          this.onEspecialistaSeleccionado(espeFiltrados[0]);
+        }, 500);
+      }
+
+      const botones =
+        $event.target.parentElement.parentNode.parentNode.children;
+      for (const boton of botones) {
+        if (boton.id != $event.target.parentElement.parentNode.id) {
+          boton.classList.add('visually-hidden');
+        }
+      }
+      this.showAddEspecialista = true;
     }
   }
-  ngOnInit(): void {}
 
-  onEspecialidadSeleccionada(especialidadSeleccionada: Especialidad) {
-    this.formularioTurno.reset();
-    this.showAddDia = false;
-    this.formularioTurno.controls['especialidad'].setValue(
-      especialidadSeleccionada.detalle
-    );
+  onEspecialistaSeleccionado(
+    especialistaSeleccionado: Especialista,
+    $event?: any
+  ) {
+    if (
+      this.especialistaSeleccionado.dni != undefined ||
+      this.diaSeleccionado != '' ||
+      this.horarioSeleccionado != ''
+    ) {
+      this.checkForm = false;
+      this.diaSeleccionado = '';
+      this.horarioSeleccionado = '';
+      this.showAddHorario = false;
+      this.showAddDia = false;
+      this.noHayHorariosDisponibles = false;
+      this.noHayDiasDisponibles = false;
+      this.especialistaSeleccionado = { tipoUsuario: 'especialista' };
+      if ($event) {
+        const botones = $event.target.parentElement.parentNode.children;
+        for (const boton of botones) {
+          if (boton.id != $event.target.parentElement.id) {
+            boton.classList.remove('visually-hidden');
+          }
+        }
+      }
+    } else {
+      this.especialistaSeleccionado = especialistaSeleccionado;
 
-    this.especialistasFiltrados = this.especialistasDisponibles.filter((E) =>
-      E.especialidad?.some(
-        (espe) => espe.detalle === especialidadSeleccionada.detalle
-      )
-    );
-    this.turno.especialidad = especialidadSeleccionada.detalle;
-    this.showAddEspecialista = true;
-  }
-  onEspecialistaSeleccionado(especialistaSeleccionado: Especialista) {
-    this.formularioTurno.controls['dia'].reset();
-    this.formularioTurno.controls['horario'].reset();
-    this.formularioTurno.controls['especialista'].setValue(
-      `${especialistaSeleccionado.nombre}, ${especialistaSeleccionado.apellido}`
-    );
+      this.storageService
+        .getTurnosByEspecialidad(
+          this.especialistaSeleccionado.email!,
+          this.especialidadSeleccionada.detalle!
+        )
+        .subscribe((T) => {
+          setTimeout(() => {
+            this.turnosDisponiles = [];
+            this.turnosDisponiles = T;
+          }, 10);
+        });
+      const especialidadEspecialista =
+        especialistaSeleccionado.especialidad!.find(
+          (es) => es.detalle == this.especialidadSeleccionada.detalle
+        );
 
-    this.turno.email_especialista = especialistaSeleccionado.email;
-    this.turno.nombre_especialista = `${especialistaSeleccionado.nombre}, ${especialistaSeleccionado.apellido}`;
-    this.storageService
-      .getTurnosByEspecialidad(
-        especialistaSeleccionado.email!,
-        this.formularioTurno.controls['especialidad'].value
-      )
-      .subscribe((T) => {
-        setTimeout(() => {
-          this.turnosDisponiles.push(...T);
-        }, 1000);
-      });
+      const disponibilidadDesde = especialidadEspecialista?.horarioaDesde
+        ? especialidadEspecialista?.horarioaDesde
+        : '';
+      const disponibilidadHasta = especialidadEspecialista?.horariosHasta
+        ? especialidadEspecialista?.horariosHasta
+        : '';
+      if ($event) {
+        const botones = $event.target.parentElement.parentNode.children;
+        for (const boton of botones) {
+          if (boton.id != $event.target.parentElement.id) {
+            boton.classList.add('visually-hidden');
+          }
+        }
+      }
 
-    const especialidadEspecialista =
-      especialistaSeleccionado.especialidad?.filter(
-        (es) =>
-          (es.detalle = this.formularioTurno.controls['especialidad'].value)
-      )[0];
-    const disponibilidadDesde = especialidadEspecialista?.horarioaDesde;
-    const disponibilidadHasta = especialidadEspecialista?.horariosHasta;
+      setTimeout(() => {
+        if (disponibilidadDesde === '' && disponibilidadHasta === '') {
+          this.noHayDiasDisponibles = true;
+          this.showAddDia = true;
+        } else {
+          this.armarMatriz(disponibilidadDesde!, disponibilidadHasta!);
 
-    setTimeout(() => {
-      this.armarMatriz(disponibilidadDesde!, disponibilidadHasta!);
-      this.showAddDia = true;
-    }, 2000);
+          this.showAddDia = true;
+        }
+      }, 1000);
+    }
   }
   /**
    * Arma la matriz de horarios disponibles del especialista
@@ -177,6 +263,7 @@ export class AltaTurnoComponent implements OnInit {
           }
         }
       }
+
       let arrayHorariosFiltrados = arrHorarios.filter(
         (horario) =>
           !this.turnosDisponiles.some(
@@ -191,16 +278,73 @@ export class AltaTurnoComponent implements OnInit {
       );
     }
   }
-  onDiaSeleccionado(dia: string, horario: string) {
-    this.checkForm = true;
-    this.formularioTurno.controls['dia'].setValue(dia);
-    this.formularioTurno.controls['horario'].setValue(horario);
+  onDiaSeleccionado(dia: string, $event: any) {
+    if (this.showAddHorario) {
+      this.checkForm = false;
+      this.diaSeleccionado = '';
+      this.horarioSeleccionado = '';
+      this.showAddHorario = false;
+      this.noHayHorariosDisponibles = false;
+      if ($event != undefined) {
+        const botones = $event.target.parentElement.parentNode.children;
+        for (const boton of botones) {
+          if (boton.id != $event.target.parentElement.id) {
+            boton.classList.remove('visually-hidden');
+          }
+        }
+      }
+    } else {
+      this.diaSeleccionado = dia;
+      if ($event != undefined) {
+        const botones = $event.target.parentElement.parentNode.children;
+        for (const boton of botones) {
+          if (boton.id != $event.target.parentElement.id) {
+            boton.classList.add('visually-hidden');
+          }
+        }
+      }
 
-    this.turno.dia = dia;
-    this.turno.horario = horario;
+      if (this.matrizTurnosDisponibles.get(dia)?.length == 1) {
+        setTimeout(() => {
+          this.onHorarioSeleccionado(this.matrizTurnosDisponibles.get(dia)![0]);
+        }, 500);
+      } else if (this.matrizTurnosDisponibles.get(dia)?.length == 0) {
+        this.noHayHorariosDisponibles = true;
+      }
+      this.showAddHorario = true;
+    }
+  }
+  onHorarioSeleccionado(horario: string, $event?: any) {
+    if (this.horarioSeleccionado != '') {
+      this.horarioSeleccionado = '';
+      this.checkForm = false;
+      if ($event != undefined) {
+        const botones = $event.target.parentElement.parentNode.children;
+
+        for (const boton of botones) {
+          if (boton.id != $event.target.parentElement.id) {
+            boton.classList.remove('visually-hidden');
+          }
+        }
+      }
+    } else {
+      this.horarioSeleccionado = horario;
+
+      if ($event != undefined) {
+        const botones = $event.target.parentElement.parentNode.children;
+
+        for (const boton of botones) {
+          if (boton.id != $event.target.parentElement.id) {
+            boton.classList.add('visually-hidden');
+          }
+        }
+      }
+      this.checkForm = true;
+    }
   }
 
   onSubmit() {
+    this.checkForm = false;
     const emailPaciente = this.emailPacienteInput
       ? this.emailPacienteInput
       : this.authService.currentUser.email;
@@ -208,10 +352,18 @@ export class AltaTurnoComponent implements OnInit {
     const nombrePaciente = this.nombrePacienteInput
       ? this.nombrePacienteInput
       : nombrePacienteStorage;
+
+    const nombreEmpecialista = `${this.especialistaSeleccionado.nombre}, ${this.especialistaSeleccionado.apellido}`;
     this.turno.email_paciente = emailPaciente;
     this.turno.estado = Estados.Pendiente;
     this.turno.nombre_paciente = nombrePaciente;
+    this.turno.email_especialista = this.especialistaSeleccionado.email;
+    this.turno.nombre_especialista = nombreEmpecialista;
     this.turno.id_turno = this.ultimoId + 1;
+    this.turno.dia = this.diaSeleccionado;
+    this.turno.horario = this.horarioSeleccionado;
+    this.turno.especialidad = this.especialidadSeleccionada.detalle;
+
     this.storageService
       .createTurno(this.turno)
       .then(() => {
