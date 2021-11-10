@@ -1,0 +1,219 @@
+<h4 class="text-center">Formulario de Historia Clínica</h4>
+<div class="row justify-content-around">
+  <h4 class="text-left">Ultimo turno tomado con Especialidad: {{ turno.especialidad }}</h4>
+  <h4 class="text-left">Fecha: {{ turno.dia }} {{turno.horario}}</h4>
+  <div class="col-10">
+    <form [formGroup]="formularioHistoriaClinica" class="col-12">
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="altura">Altura:</label>
+        <input
+          formControlName="altura"
+          type="number"
+          class="form-control form-control-sm"
+          name="altura"
+          autocomplete="off"
+          placeholder="Cm."
+        />
+      </div>
+      <!-- ErrorMessages altura -->
+      <div
+        class="form-text text-danger"
+        *ngIf="
+          formularioHistoriaClinica.get('altura')?.hasError('required') &&
+          formularioHistoriaClinica.get('altura')?.touched
+        "
+      >
+        * La altura es requerida.
+      </div>
+      <!-- ErrorMessages altura END -->
+
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="peso">Peso:</label>
+        <input
+          formControlName="peso"
+          type="number"
+          class="form-control form-control-sm"
+          name="peso"
+          autocomplete="off"
+          placeholder="Kg."
+        />
+      </div>
+      <!-- ErrorMessages peso -->
+      <div
+        class="form-text text-danger"
+        *ngIf="
+          formularioHistoriaClinica.get('peso')?.hasError('required') &&
+          formularioHistoriaClinica.get('peso')?.touched
+        "
+      >
+        * El peso es requerido.
+      </div>
+      <!-- ErrorMessages peso END -->
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="temperatura">Temperatura:</label>
+        <input
+          formControlName="temperatura"
+          type="number"
+          class="form-control form-control-sm"
+          name="temperatura"
+          autocomplete="off"
+          placeholder="C°"
+        />
+      </div>
+      <!-- ErrorMessages temperatura -->
+      <div
+        class="form-text text-danger"
+        *ngIf="
+          formularioHistoriaClinica.get('temperatura')?.hasError('required') &&
+          formularioHistoriaClinica.get('temperatura')?.touched
+        "
+      >
+        * La temperatura es requerida.
+      </div>
+      <!-- ErrorMessages temperatura END -->
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="presion">Presión:</label>
+        <input
+          formControlName="presion"
+          type="text"
+          class="form-control form-control-sm"
+          name="presion"
+          autocomplete="off"
+          placeholder="max/min"
+        />
+      </div>
+      <!-- ErrorMessages presion -->
+      <div
+        class="form-text text-danger"
+        *ngIf="
+          formularioHistoriaClinica.get('presion')?.hasError('required') &&
+          formularioHistoriaClinica.get('presion')?.touched
+        "
+      >
+        * La presion es requerida.
+      </div>
+      <!-- ErrorMessages presion END -->
+    </form>
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="extra1">Información N°1:</label>
+      <input
+        [(ngModel)]="deta1"
+        type="text"
+        class="form-control form-control-sm"
+        name="deta1"
+        autocomplete="off"
+        placeholder="Detalle"
+      />
+      <input
+        [(ngModel)]="extra1"
+        type="text"
+        class="form-control form-control-sm"
+        name="extra1"
+        autocomplete="off"
+        placeholder="Observación"
+      />
+      <div (click)="onShowExtra2()" *ngIf="!showExtra2">
+        <h1 class="m-0 ms-3 p-0">
+          <i class="bi bi-plus-circle-fill text-success"></i>
+        </h1>
+      </div>
+    </div>
+    <!-- ErrorMessages extra1 -->
+    <!-- <div
+        class="form-text text-danger"
+        *ngIf="
+          formularioHistoriaClinica.get('extra1')?.hasError('required') &&
+          formularioHistoriaClinica.get('extra1')?.touched
+        "
+      >
+        * La información extra n°1 es requerida.
+      </div> -->
+    <!-- ErrorMessages extra1 END -->
+    <div class="input-group mb-3" *ngIf="showExtra2">
+      <label class="input-group-text" for="extra2">Información N°2:</label>
+      <input
+        [(ngModel)]="deta2"
+        type="text"
+        class="form-control form-control-sm"
+        name="deta2"
+        autocomplete="off"
+        placeholder="Detalle"
+      />
+      <input
+        [(ngModel)]="extra2"
+        type="text"
+        class="form-control form-control-sm"
+        name="extra2"
+        autocomplete="off"
+        placeholder="Observación"
+      />
+      <div (click)="onShowExtra3()" *ngIf="!showExtra1 && !showExtra3">
+        <h1 class="m-0 ms-3 p-0">
+          <i class="bi bi-plus-circle-fill text-success"></i>
+        </h1>
+      </div>
+      <div (click)="onCleanExtra2()" *ngIf="showExtra2 && !showExtra3">
+        <h1 class="m-0 ms-3 p-0">
+          <i class="bi bi-dash-circle-fill text-danger"></i>
+        </h1>
+      </div>
+    </div>
+    <!-- ErrorMessages extra2 -->
+    <!-- <div
+        class="form-text text-danger"
+        *ngIf="
+          formularioHistoriaClinica.get('extra2')?.hasError('required') &&
+          formularioHistoriaClinica.get('extra2')?.touched
+        "
+      >
+        * La información extra n°1 es requerida.
+      </div> -->
+    <!-- ErrorMessages extra1 END -->
+    <div class="input-group mb-3" *ngIf="showExtra3">
+      <label class="input-group-text" for="extra3">Información N°3:</label>
+      <input
+        [(ngModel)]="deta3"
+        type="text"
+        class="form-control form-control-sm"
+        name="deta3"
+        autocomplete="off"
+        placeholder="Detalle"
+      />
+      <input
+        [(ngModel)]="extra3"
+        type="text"
+        class="form-control form-control-sm"
+        name="extra3"
+        autocomplete="off"
+        placeholder="Observación"
+      />
+      <div (click)="onCleanExtra3()" *ngIf="showExtra3">
+        <h1 class="m-0 ms-3 p-0">
+          <i class="bi bi-dash-circle-fill text-danger"></i>
+        </h1>
+      </div>
+    </div>
+    <!-- ErrorMessages extra3 -->
+    <!-- <div
+        class="form-text text-danger"
+        *ngIf="
+          formularioHistoriaClinica.get('extra1')?.hasError('required') &&
+          formularioHistoriaClinica.get('extra1')?.touched
+        "
+      >
+        * La información extra n°1 es requerida.
+      </div> -->
+    <!-- ErrorMessages extra3 END -->
+    <button
+      type="button"
+      class="btn btn-success"
+      [disabled]="!formularioHistoriaClinica.valid || !formCheck"
+      (click)="onSubmit()"
+    >
+      Guardar
+    </button>
+    <button type="button" class="btn btn-danger" (click)="onCancelar()">
+      Cancelar
+    </button>
+  </div>
+</div>

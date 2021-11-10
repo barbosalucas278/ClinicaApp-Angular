@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+
 import { AuthService } from 'src/app/modules/auth/services/auth/auth.service';
 import { UsuarioService } from 'src/app/modules/auth/services/auth/usuarios/usuarios.service';
 import { Paciente } from 'src/app/modules/clases/paciente';
+import * as moment from 'moment';
+import { Papa } from 'ngx-papaparse';
 
 @Component({
   selector: 'app-usuarios-admin',
@@ -17,16 +20,19 @@ export class UsuariosAdminComponent implements OnInit {
   usuariosFiltrados: any[];
   tablaActiva: string;
   showRegistrar: boolean;
+  showMiHistoriaClinica: boolean;
   constructor(
     private userService: UsuarioService,
-    private authService: AuthService
+    private authService: AuthService,
+    private papa: Papa
   ) {
+    this.showMiHistoriaClinica = false;
     this.showAltaTurno = false;
     this.showRegistrar = false;
     this.mostrarSpinner = false;
     this.usuarios = [];
     this.usuariosFiltrados = [];
-    this.tablaActiva = '';
+    this.tablaActiva = 'especialista';
     this.emailPaciente = '';
     this.nombrePaciente = '';
   }
@@ -43,14 +49,23 @@ export class UsuariosAdminComponent implements OnInit {
   }
   showTablaPacientes() {
     this.tablaActiva = 'paciente';
+    this.showMiHistoriaClinica = false;
+    this.showAltaTurno = false;
+    this.showRegistrar = false;
     this.actualizarTabla();
   }
   showTablaEspecialistas() {
     this.tablaActiva = 'especialista';
+    this.showMiHistoriaClinica = false;
+    this.showAltaTurno = false;
+    this.showRegistrar = false;
     this.actualizarTabla();
   }
   showTablaAdministradores() {
     this.tablaActiva = 'administrador';
+    this.showMiHistoriaClinica = false;
+    this.showAltaTurno = false;
+    this.showRegistrar = false;
     this.actualizarTabla();
   }
   showCrearUsuario() {
@@ -96,10 +111,51 @@ export class UsuariosAdminComponent implements OnInit {
     this.nombrePaciente = `${paciente.nombre}, ${paciente.apellido}`;
     this.showAltaTurno = true;
   }
+  onShowHistoriaClinica(paciente: Paciente) {
+    this.emailPaciente = paciente.email!;
+    this.showMiHistoriaClinica = true;
+  }
+  volverAlMenuPrincipal() {
+    this.emailPaciente = '';
+    this.showMiHistoriaClinica = false;
+  }
   onProcesoDeAltaTerminado() {
     this.showAltaTurno = false;
   }
   cancelarAgregarTurno() {
     this.showAltaTurno = false;
+  }
+  descargarExcel() {
+    const excelObject = this.mapData(this.usuarios);
+    const csv = this.papa.unparse({ data: excelObject });
+
+    const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+    let csvURL = null;
+
+    csvURL = window.URL.createObjectURL(csvData);
+
+    // For Browser
+    const tempLink = document.createElement('a');
+    tempLink.href = csvURL;
+    tempLink.setAttribute(
+      'download',
+      `usuarios-${moment().format('DD-MM-yyyy')}.xlsx`
+    );
+    tempLink.click();
+  }
+
+  // tslint:disable-next-line: typedef
+  private mapData(data: any[]) {
+    return data.map((item) => {
+      return {
+        email: item.email,
+        nombre: item.nombre,
+        apellido: item.apellido,
+        edad: item.edad,
+        dni: item.dni,
+        tipoUsuario: item.tipoUsuario,
+      };
+    });
   }
 }

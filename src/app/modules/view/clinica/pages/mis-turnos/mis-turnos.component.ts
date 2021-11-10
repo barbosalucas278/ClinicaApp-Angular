@@ -12,6 +12,7 @@ import { Paciente } from 'src/app/modules/clases/paciente';
   styleUrls: ['./mis-turnos.component.scss'],
 })
 export class MisTurnosComponent implements OnInit {
+  isOpen: boolean = false;
   showAltaTurno: boolean = false;
   showMisTurnos: boolean;
   mostrarSpinner: boolean;

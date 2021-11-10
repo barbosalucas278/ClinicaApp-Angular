@@ -16,6 +16,10 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { CardTurnoComponent } from './pacientes/componentes/card-turno/card-turno.component';
 import { DirectivasModule } from '../../directivas/directivas.module';
 import { TablaTurnosComponent } from './especialistas/componentes/tabla-turnos/tabla-turnos.component';
+import { AltaHistoriaClinicaComponent } from './especialistas/alta-historia-clinica/alta-historia-clinica.component';
+import { HistoriaClinicaCardComponent } from './especialistas/componentes/historia-clinica-card/historia-clinica-card.component';
+import { MisPacientesComponent } from './especialistas/mis-pacientes/mis-pacientes.component';
+import { TablaPAcientesComponent } from './especialistas/componentes/tabla-pacientes/tabla-pacientes.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +32,17 @@ import { TablaTurnosComponent } from './especialistas/componentes/tabla-turnos/t
     ListaDeTurnosComponent,
     CardTurnoComponent,
     TablaTurnosComponent,
+    AltaHistoriaClinicaComponent,
+    HistoriaClinicaCardComponent,
+    MisPacientesComponent,
+    TablaPAcientesComponent,
   ],
-  exports: [TablaTurnosComponent, AltaTurnoComponent, CardTurnoComponent],
+  exports: [
+    TablaTurnosComponent,
+    AltaTurnoComponent,
+    CardTurnoComponent,
+    HistoriaClinicaCardComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,

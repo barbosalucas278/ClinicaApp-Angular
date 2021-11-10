@@ -363,7 +363,7 @@ export class AltaTurnoComponent implements OnInit {
     this.turno.dia = this.diaSeleccionado;
     this.turno.horario = this.horarioSeleccionado;
     this.turno.especialidad = this.especialidadSeleccionada.detalle;
-
+    this.turno.historiaClinicaCargada = false;
     this.storageService
       .createTurno(this.turno)
       .then(() => {

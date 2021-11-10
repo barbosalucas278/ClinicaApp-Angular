@@ -1,0 +1,64 @@
+<div class="container py-4" *ngIf="!showAltaHistoriaClinica">
+  <header class="pb-3 mb-4 border-bottom">
+    <h2>
+      <a class="d-flex align-items-center text-dark text-decoration-none">
+        Pacientes
+      </a>
+    </h2>
+  </header>
+  <div class="container-fluid mb-5">
+    <div class="row">
+      <div class="col-6">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Buscar por especialidad o paciente"
+          aria-label="Search"
+          (keyup)="onChangeBusqueda($event)"
+        />
+      </div>
+    </div>
+  </div>
+  <table class="table" id="tabla-pacientes">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Obra Social</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let paciente of pacientesFiltrados; let i = index">
+        <td>{{ paciente.nombre }}</td>
+        <td>{{ paciente.apellido }}</td>
+        <td>{{ paciente.dni }}</td>
+        <td>{{ paciente.obraSocial }}</td>
+        <th scope="row">
+          <button
+            *ngIf="tieneTurnosSinHistoriaClinica(paciente)"
+            class="btn btn-sm p-0"
+            (click)="onDejarHistoriaClinica(paciente)"
+          >
+            <i
+              id="{{ i }}BtnVerReseniaHistoriaClinica"
+              class="bi bi-file-earmark-plus-fill text-primary"
+              title="Agregar Historia Clinica"
+              style="font-size: 24px"
+            ></i>
+          </button>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="row justify-content-center">
+  <app-alta-historia-clinica
+    class="col-12"
+    *ngIf="showAltaHistoriaClinica"
+    [paciente]="paciente_activo"
+    [turno]="turno_activo"
+    (procesoDeAltaTerminado)="onCargaHistoriaClinicaEnd()"
+  ></app-alta-historia-clinica>
+</div>

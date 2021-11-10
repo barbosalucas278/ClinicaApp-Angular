@@ -5,6 +5,8 @@ import { SoloEspecialistasGuard } from '../../auth/services/auth/guards/solo-esp
 import { SoloPacientesGuard } from '../../auth/services/auth/guards/solo-pacientes.guard';
 import { MisTurnosComponent } from './pages/mis-turnos/mis-turnos.component';
 import { MiPerfilComponent } from './pages/mi-perfil/mi-perfil.component';
+import { MisPacientesComponent } from './especialistas/mis-pacientes/mis-pacientes.component';
+import { AccesoMisPacientesGuard } from '../../auth/services/auth/guards/acceso-mis-pacientes.guard';
 
 const routes: Routes = [
   {
@@ -18,6 +20,11 @@ const routes: Routes = [
         path: 'misturnos',
         component: MisTurnosComponent,
         canActivate: [AccesoMisTurnosGuard],
+      },
+      {
+        path: 'pacientes',
+        component: MisPacientesComponent,
+        canActivate: [AccesoMisPacientesGuard],
       },
       {
         path: '',

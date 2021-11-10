@@ -1,4 +1,4 @@
-<div class="container py-4">
+<div class="container py-4" *ngIf="!showAltaHistoriaClinica">
   <header class="pb-3 mb-4 border-bottom">
     <h2>
       <a class="d-flex align-items-center text-dark text-decoration-none">
@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-6">
         <input
-        *ngIf="adminPanel"
+          *ngIf="adminPanel"
           class="form-control me-2"
           type="search"
           placeholder="Buscar por especialidad o especialista"
@@ -18,7 +18,7 @@
           (keyup)="onChangeBusqueda($event)"
         />
         <input
-        *ngIf="!adminPanel"
+          *ngIf="!adminPanel"
           class="form-control me-2"
           type="search"
           placeholder="Buscar por especialidad o paciente"
@@ -39,7 +39,7 @@
         <th scope="col">Acciones</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody [@filterAnimation]="turnosTotal">
       <tr *ngFor="let turno of turnosFiltrados; let i = index">
         <td>{{ turno.dia }}</td>
         <td>{{ turno.horario }}</td>
@@ -74,9 +74,9 @@
           >
             <i
               id="{{ i }}BtnAceptarTurno"
-              class="bi bi-check-square-fill"
+              class="bi bi-check-square-fill text-primary"
               title="Aceptar"
-              style="color: green; font-size: 24px"
+              style="font-size: 24px"
             ></i>
           </button>
           <button
@@ -88,7 +88,19 @@
               id="{{ i }}BtnRechazarTurno"
               class="bi bi-x-square-fill"
               title="Rechazar"
-              style="color: yellow; font-size: 24px"
+              style="color: orange; font-size: 24px"
+            ></i>
+          </button>
+          <button
+            class="btn btn-sm p-0"
+            *ngIf="turno.estado == 'aceptado' && !adminPanel"
+            (click)="onTomarTurno(turno)"
+          >
+            <i
+              id="{{ i }}BtnTomarTurno"
+              class="bi bi-check-square-fill"
+              title="Tomar"
+              style="color: green; font-size: 24px"
             ></i>
           </button>
           <button

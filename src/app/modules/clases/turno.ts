@@ -1,4 +1,5 @@
 import { Encuesta } from './encuesta';
+import { HistoriaClinica } from './historia-clinica';
 import { Resenia } from './resenia';
 
 export interface Turno {
@@ -14,6 +15,8 @@ export interface Turno {
   resenia?: Resenia[];
   encuesta?: Encuesta;
   calificacion?: string;
+  historiaClinicaCargada?: boolean;
+  historiaClinica?: HistoriaClinica;
 }
 export enum Estados {
   Pendiente = 'pendiente', //gris

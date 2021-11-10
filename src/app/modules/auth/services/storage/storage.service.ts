@@ -7,11 +7,16 @@ import {
   AngularFireStorage,
   AngularFireUploadTask,
 } from '@angular/fire/compat/storage';
+import { map } from '@firebase/util';
 import { Observable } from 'rxjs';
 import { Encuesta } from 'src/app/modules/clases/encuesta';
 import { Especialidad } from 'src/app/modules/clases/especialidad';
+import { HistoriaClinica } from 'src/app/modules/clases/historia-clinica';
+import { HistoriaEspecifica } from 'src/app/modules/clases/historia-especifica';
+import { Paciente } from 'src/app/modules/clases/paciente';
 import { Resenia } from 'src/app/modules/clases/resenia';
 import { Turno } from 'src/app/modules/clases/turno';
+import { isToken } from 'typescript';
 
 @Injectable({
   providedIn: 'root',
@@ -64,9 +69,7 @@ export class StorageService {
    */
   getTurnosByEspecialista(emailEspecialialista: string) {
     const turnosFiltrados = this.db.collection('turnos', (ref) =>
-      ref
-        .where('email_especialista', '==', `${emailEspecialialista}`)
-
+      ref.where('email_especialista', '==', `${emailEspecialialista}`)
     );
     return turnosFiltrados.valueChanges() as Observable<Turno[]>;
   }
@@ -87,8 +90,7 @@ export class StorageService {
    */
   getTurnosByPaciente(emailPaciente: string) {
     const turnosFiltrados = this.db.collection('turnos', (ref) =>
-      ref
-        .where('email_paciente', '==', `${emailPaciente}`)
+      ref.where('email_paciente', '==', `${emailPaciente}`)
     );
     return turnosFiltrados.valueChanges() as Observable<Turno[]>;
   }
@@ -114,10 +116,54 @@ export class StorageService {
     const currentUsuario = this.db.doc(`turnos/${id_turno}`);
     return currentUsuario.update({ calificacion: calificacion });
   }
+  guardarEstadoHistoriaClinicaEnTurno(
+    id_turno: number,
+    historiaClinica: HistoriaClinica
+  ) {
+    const currentUsuario = this.db.doc(`turnos/${id_turno}`);
+    return currentUsuario.update({
+      historiaClinicaCargada: true,
+      historiaClinica: historiaClinica,
+    });
+  }
   getTurnos() {
     const turnosFiltrados = this.db.collection('turnos', (ref) =>
       ref.limit(25).orderBy('dia', 'desc')
     );
     return turnosFiltrados.valueChanges() as Observable<Turno[]>;
+  }
+
+  guardarHistoriaClinica(
+    email_paciente: string,
+    historiaClinica: HistoriaClinica
+  ) {
+    const currentUsuario = this.db.doc(`usuarios/${email_paciente}`);
+    let historiasEspecificasCurrent: HistoriaEspecifica[] = [];
+    const pacienteObservable =
+      currentUsuario.valueChanges() as Observable<Paciente>;
+    pacienteObservable.subscribe((p) => {
+      historiasEspecificasCurrent = p.historiaClinica?.historiasEspecificas
+        ? p.historiaClinica?.historiasEspecificas!.filter(
+            (e) =>
+              !historiaClinica.historiasEspecificas?.some(
+                (es) => es.especialidad == e.especialidad
+              )
+          )
+        : [];
+      historiasEspecificasCurrent.push(
+        ...historiaClinica.historiasEspecificas!
+      );
+    });
+    setTimeout(() => {
+      return currentUsuario.update({
+        historiaClinica: {
+          altura: historiaClinica.altura,
+          peso: historiaClinica.peso,
+          presion: historiaClinica.presion,
+          temperatura: historiaClinica.temperatura,
+          historiasEspecificas: historiasEspecificasCurrent,
+        },
+      });
+    }, 1000);
   }
 }

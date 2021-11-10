@@ -21,8 +21,16 @@
     >
       Administradores
     </button>
+    <button (click)="descargarExcel()" class="btn btn-warning p-0 me-3">
+      Descargar Usuarios
+      <i
+        class="bi bi-file-earmark-arrow-down text-dark"
+        title="Agregar Historia Clinica"
+        style="font-size: 24px"
+      ></i>
+    </button>
     <button
-      class="btn btn-info me-3"
+      class="btn btn-success me-3"
       (click)="showCrearUsuario()"
       *ngIf="!showRegistrar"
     >
@@ -41,9 +49,14 @@
   <app-register *ngIf="showRegistrar" [adminPanel]="true"></app-register>
 </div>
 <table
-  *ngIf="tablaActiva == 'paciente' && !showRegistrar && !showAltaTurno"
+  *ngIf="
+    tablaActiva == 'paciente' &&
+    !showRegistrar &&
+    !showAltaTurno &&
+    !showMiHistoriaClinica
+  "
   class="table"
-  id="tabla-pacientes"
+  id="tabla-paciente"
 >
   <thead>
     <tr>
@@ -61,10 +74,7 @@
       <td>{{ user.dni }}</td>
       <td>{{ user.obraSocial }}</td>
       <th scope="row">
-        <button
-          (click)="onAgregarTurno(user)"
-          class="btn btn-sm p-0"
-        >
+        <button (click)="onAgregarTurno(user)" class="btn btn-sm p-0">
           <i
             id="{{ i }}BtnAgregarTurno"
             class="bi bi-plus-square-fill"
@@ -72,14 +82,27 @@
             style="color: green; font-size: 24px"
           ></i>
         </button>
+        <button (click)="onShowHistoriaClinica(user)" class="btn btn-sm p-0">
+          <i
+            id="{{ i }}BtnVerReseniaHistoriaClinica"
+            class="bi bi-journal-text text-dark"
+            title="Agregar Historia Clinica"
+            style="font-size: 24px"
+          ></i>
+        </button>
       </th>
     </tr>
   </tbody>
 </table>
 <table
-  *ngIf="tablaActiva == 'especialista' && !showRegistrar && !showAltaTurno"
+  *ngIf="
+    tablaActiva == 'especialista' &&
+    !showRegistrar &&
+    !showAltaTurno &&
+    !showMiHistoriaClinica
+  "
   class="table"
-  id="tabla-especialistas"
+  id="tabla-especialista"
 >
   <thead>
     <tr>
@@ -129,9 +152,14 @@
   </tbody>
 </table>
 <table
-  *ngIf="tablaActiva == 'administrador' && !showRegistrar && !showAltaTurno"
+  *ngIf="
+    tablaActiva == 'administrador' &&
+    !showRegistrar &&
+    !showAltaTurno &&
+    !showMiHistoriaClinica
+  "
   class="table"
-  id="tabla-administradores"
+  id="tabla-administrador"
 >
   <thead>
     <tr>
@@ -152,6 +180,17 @@
 </table>
 
 <div class="row justify-content-center">
+  <app-historia-clinica-card
+    *ngIf="showMiHistoriaClinica"
+    [email_paciente]="emailPaciente"
+  ></app-historia-clinica-card>
+  <button
+    *ngIf="showMiHistoriaClinica"
+    class="btn btn-danger col-4 mt-3"
+    (click)="volverAlMenuPrincipal()"
+  >
+    Volver
+  </button>
   <app-alta-turno
     [emailPacienteInput]="emailPaciente"
     [nombrePacienteInput]="nombrePaciente"

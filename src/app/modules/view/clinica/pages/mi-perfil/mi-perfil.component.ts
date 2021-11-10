@@ -1,3 +1,10 @@
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { AuthService } from 'src/app/modules/auth/services/auth/auth.service';
@@ -13,9 +20,11 @@ import { Usuario } from 'src/app/modules/clases/usuario';
   styleUrls: ['./mi-perfil.component.scss'],
 })
 export class MiPerfilComponent implements OnInit {
+  vistaCargada: boolean = false;
   currentUser: any;
   showMisHorarios: boolean;
   showMiPerfil: boolean;
+  showMiHistoriaClinica: boolean = false;
   constructor(
     private usuariosService: UsuarioService,
     private authService: AuthService
@@ -82,6 +91,7 @@ export class MiPerfilComponent implements OnInit {
             this.currentUser.obraSocial = current.obraSocial;
           }
           this.currentUser.tipoUsuario = current.tipoUsuario;
+          this.vistaCargada = true;
         });
     }, 800);
   }
@@ -94,5 +104,10 @@ export class MiPerfilComponent implements OnInit {
   onShowMiPerfil() {
     this.showMisHorarios = false;
     this.showMiPerfil = true;
+    this.showMiHistoriaClinica = false;
+  }
+  onShowMiHistoriaClinica() {
+    this.showMiPerfil = false;
+    this.showMiHistoriaClinica = true;
   }
 }

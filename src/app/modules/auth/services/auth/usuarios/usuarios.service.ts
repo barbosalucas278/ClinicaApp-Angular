@@ -6,6 +6,7 @@ import {
 import { Observable } from 'rxjs/internal/Observable';
 import { Especialidad } from 'src/app/modules/clases/especialidad';
 import { Especialista } from 'src/app/modules/clases/especialista';
+import { Paciente } from 'src/app/modules/clases/paciente';
 import { Usuario } from 'src/app/modules/clases/usuario';
 import { AuthService } from '../auth.service';
 
@@ -25,9 +26,25 @@ export class UsuarioService {
   }
   obtenerEspecialistas() {
     const currentUsuario = this.db.collection('usuarios', (ref) =>
-      ref.where('tipoUsuario', '==', `especialista`).where('aprobado', '==', true)
+      ref
+        .where('tipoUsuario', '==', `especialista`)
+        .where('aprobado', '==', true)
     );
     return currentUsuario.valueChanges() as Observable<Especialista[]>;
+  }
+  obtenerPacientes() {
+    const currentUsuario = this.db.collection('usuarios', (ref) =>
+      ref.where('tipoUsuario', '==', `paciente`)
+    );
+    return currentUsuario.valueChanges() as Observable<Paciente[]>;
+  }
+  obtenerPaciente(email_paciente: string) {
+    const currentUsuario = this.db.collection('usuarios', (ref) =>
+      ref
+        .where('tipoUsuario', '==', `paciente`)
+        .where('email', '==', `${email_paciente}`)
+    );
+    return currentUsuario.valueChanges() as Observable<Paciente[]>;
   }
   crearUsuarios(usuario: Usuario) {
     return this.usuariosRef.doc(usuario.email).set({ ...usuario });

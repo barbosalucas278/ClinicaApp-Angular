@@ -1,3 +1,11 @@
+import {
+  animate,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth/services/auth/auth.service';
@@ -9,15 +17,42 @@ import { Estados, Turno } from 'src/app/modules/clases/turno';
   selector: 'app-tabla-turnos',
   templateUrl: './tabla-turnos.component.html',
   styleUrls: ['./tabla-turnos.component.scss'],
+  animations: [
+    trigger('filterAnimation', [
+      transition(':enter, * => 0, * => -1', []),
+      transition(':increment', [
+        query(
+          ':enter',
+          [
+            style({ opacity: 0, width: '0px' }),
+            stagger(50, [
+              animate('300ms ease-out', style({ opacity: 1, width: '*' })),
+            ]),
+          ],
+          { optional: true }
+        ),
+      ]),
+      transition(':decrement', [
+        query(':leave', [
+          stagger(50, [
+            animate('300ms ease-out', style({ opacity: 0, width: '0px' })),
+          ]),
+        ]),
+      ]),
+    ]),
+  ],
 })
 export class TablaTurnosComponent implements OnInit {
   @Input() adminPanel: boolean;
+  turnosTotal = -1;
   turnos: Turno[] = [];
   turnosFiltrados: Turno[] = [];
   resenia: Resenia = {};
   id_turnoActivo: number = 0;
+  turno_activo: Turno = {};
   suscripcionEspecialista: Subscription;
   palabraClave: string = '';
+  showAltaHistoriaClinica: boolean = false;
   constructor(
     private storageService: StorageService,
     private authService: AuthService
@@ -35,6 +70,7 @@ export class TablaTurnosComponent implements OnInit {
           this.turnosFiltrados = this.turnos;
           this.filtrarLosTurnos();
         }
+        this.turnosTotal = this.turnosFiltrados.length;
       });
   }
   onBtnCancelar(turno: Turno) {
@@ -52,6 +88,8 @@ export class TablaTurnosComponent implements OnInit {
   onCancelarModalCancelar() {
     this.resenia.comentario = '';
   }
+  onCancelarHistoriaClinica() {}
+
   onRechazarTurno(turno: Turno) {
     this.storageService.updateEstadoDeUnTurno(
       Estados.Rechazado,
@@ -63,6 +101,9 @@ export class TablaTurnosComponent implements OnInit {
       Estados.Aceptado,
       turno.id_turno!
     );
+  }
+  onTomarTurno(turno: Turno) {
+    this.storageService.updateEstadoDeUnTurno(Estados.Tomado, turno.id_turno!);
   }
   onFinalizarTurno(turno: Turno) {
     this.storageService.updateEstadoDeUnTurno(
@@ -94,14 +135,19 @@ export class TablaTurnosComponent implements OnInit {
             T.nombre_especialista?.startsWith(this.palabraClave)
         );
       } else {
-        this.turnosFiltrados = this.turnos.filter(
-          (T) =>
+        this.turnosFiltrados = this.turnos.filter((T) => {
+          const regex = new RegExp('\\b(' + this.palabraClave + ')\\b', 'gi');
+          return (
             T.especialidad?.startsWith(this.palabraClave) ||
-            T.nombre_paciente?.startsWith(this.palabraClave)
-        );
+            T.nombre_paciente?.startsWith(this.palabraClave) ||
+            regex.test(JSON.stringify(T))
+          );
+        });
       }
+      this.turnosTotal = this.turnosFiltrados.length;
     } else {
       this.turnosFiltrados = this.turnos;
+      this.turnosTotal = this.turnosFiltrados.length;
     }
   }
   ngOnInit(): void {

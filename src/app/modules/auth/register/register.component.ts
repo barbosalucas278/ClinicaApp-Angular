@@ -129,7 +129,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnChanges() {}
   onSubmit() {
-    if (this.tipoUsuario == 'paciente' && this.formReCaptcha.valid) {
+    // if (this.tipoUsuario == 'paciente' && this.formReCaptcha.valid) {
+    if (this.tipoUsuario == 'paciente') {
       const { nombre, apellido, email, edad, dni, password, obraSocial } =
         this.formularioPaciente.value;
       this.usuarioPaciente.nombre = nombre;
@@ -195,29 +196,29 @@ export class RegisterComponent implements OnInit {
           }, 1500);
         });
     } else {
-      if (this.formReCaptcha.valid) {
-        const { nombre, apellido, email, edad, dni, password } =
-          this.formularioAdministrador.value;
-        this.usuarioAdministrador.nombre = nombre;
-        this.usuarioAdministrador.apellido = apellido;
-        this.usuarioAdministrador.email = email;
-        this.usuarioAdministrador.edad = edad;
-        this.usuarioAdministrador.dni = dni;
-        this.usuarioAdministrador.password = password;
-        this.authService
-          .register(this.usuarioAdministrador, this.urlImgAdministrador!)
-          .then(() => {
-            this.mostrarSpinner = true;
-            setTimeout(() => {
-              if (!this.adminPanel) {
-                this.authService.logout();
-                this.router.navigate(['auth']);
-              } else {
-                this.onVolverSeleccionTipuUsuario();
-              }
-            }, 1500);
-          });
-      }
+      // if (this.formReCaptcha.valid) {
+      const { nombre, apellido, email, edad, dni, password } =
+        this.formularioAdministrador.value;
+      this.usuarioAdministrador.nombre = nombre;
+      this.usuarioAdministrador.apellido = apellido;
+      this.usuarioAdministrador.email = email;
+      this.usuarioAdministrador.edad = edad;
+      this.usuarioAdministrador.dni = dni;
+      this.usuarioAdministrador.password = password;
+      this.authService
+        .register(this.usuarioAdministrador, this.urlImgAdministrador!)
+        .then(() => {
+          this.mostrarSpinner = true;
+          setTimeout(() => {
+            if (!this.adminPanel) {
+              this.authService.logout();
+              this.router.navigate(['auth']);
+            } else {
+              this.onVolverSeleccionTipuUsuario();
+            }
+          }, 1500);
+        });
+      // }
     }
   }
   onVolver() {

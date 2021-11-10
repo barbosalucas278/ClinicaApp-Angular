@@ -9,10 +9,23 @@
     >
       <span class="fs-4">Mis Horarios</span>
     </a>
+    <a
+      (click)="onShowMiHistoriaClinica()"
+      *ngIf="currentUser.tipoUsuario == 'paciente'"
+    >
+      <span class="fs-4">Mi Historia Clínica</span>
+    </a>
   </header>
   <app-mis-horarios
     [especialista]="currentUser"
     *ngIf="showMisHorarios && currentUser.tipoUsuario == 'especialista'"
   ></app-mis-horarios>
-  <app-perfil [currentUser]="currentUser" *ngIf="showMiPerfil"></app-perfil>
+  <app-historia-clinica-card
+    *ngIf="showMiHistoriaClinica"
+    [email_paciente]="currentUser.email"
+  ></app-historia-clinica-card>
+  <app-perfil
+    [currentUser]="currentUser"
+    *ngIf="showMiPerfil && currentUser"
+  ></app-perfil>
 </div>

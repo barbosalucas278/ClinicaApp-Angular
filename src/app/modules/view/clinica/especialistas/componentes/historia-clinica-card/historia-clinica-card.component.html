@@ -1,0 +1,48 @@
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="row justify-content-center">
+    <!-- <spinner class="col-3" *ngIf="mostrarSpinner"></spinner> -->
+  </div>
+  <div class="row justify-content-start" *ngIf="historiaClinica">
+    <button (click)="descargarPDF()" class="btn btn-sm p-0 col-1">
+      <i
+        class="bi bi-file-earmark-arrow-down text-dark"
+        title="Descargar Historia Clinica"
+        style="font-size: 48px"
+      ></i>
+    </button>
+  </div>
+  <div class="container-fluid" *ngIf="historiaClinica" id="contenedorHistoria">
+    <div class="row justify-content-center">
+      <h3 class="text-center">Historia Clínica General</h3>
+      <div class="col-4 fs-3 mt-4">
+        <p>Altura: {{ historiaClinica.altura }} Cm.</p>
+        <p>Peso: {{ historiaClinica.peso }} Kg.</p>
+      </div>
+      <div class="col-4 fs-3 mt-4">
+        <p>Temperatura: {{ historiaClinica.temperatura }} C°</p>
+        <p>Presión: {{ historiaClinica.presion }}</p>
+      </div>
+      <h3 class="text-center">Historias Clínicas específicas</h3>
+      <div class="row justify-content-center">
+        <div class="col-8">
+          <ul
+            *ngFor="let historia of historiaClinica.historiasEspecificas"
+            class="mt-4"
+          >
+            <li>
+              {{ historia.especialista }} - {{ historia.especialidad }} - Fecha:
+              {{ historia.fecha }}
+            </li>
+            <li></li>
+            <li>Observaciones</li>
+            <div *ngFor="let especifica of historia.especificaciones">
+              <li>
+                {{ especifica.detalle | uppercase }}: {{ especifica.dato }}
+              </li>
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

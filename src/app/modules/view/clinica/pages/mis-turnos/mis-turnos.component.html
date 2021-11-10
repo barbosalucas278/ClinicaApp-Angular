@@ -7,7 +7,10 @@
       Solicitar Turno
     </button>
   </div>
-  <div class="col-3" *ngIf="!showMisTurnos  && currentUser.tipoUsuario! == 'paciente'">
+  <div
+    class="col-3"
+    *ngIf="!showMisTurnos && currentUser.tipoUsuario! == 'paciente'"
+  >
     <button class="btn btn-warning" (click)="onShowMisTurnos()">
       Volver a Mis Turnos
     </button>

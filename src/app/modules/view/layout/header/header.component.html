@@ -29,6 +29,15 @@
               >Mi Perfil</a
             >
           </li>
+          <li class="nav-item" *ngIf="userData?.tipoUsuario == 'especialista'">
+            <a
+              data-bs-toggle="collapse"
+              data-bs-target=".navbar-collapse.show"
+              class="nav-link"
+              (click)="onPacientes()"
+              >Pacientes</a
+            >
+          </li>
           <!-- Header Especialista FIN -->
           <!-- Header Paciente -->
           <li
