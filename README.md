@@ -12,14 +12,15 @@ Para poder registrarse al sistema como paciente o especialista, debemos acceder 
 
 Para poder ingresar al sistema, debemos ingresar nuestro email y contraseña en el menu principal, priviamente nos llegará un email de confirmación de cuenta que debemos activar desde nuestra cuenta accediendo a nuestro correo electrónico y haciendo click al link que nos llega por correo electrónico. 
 Si usted es un especialista, debe esperar la aprobación de un administrador del sistema para poder ingresar.
-
+![principal](https://github.com/barbosalucas278/imagenes-readme/blob/main/ejemplo-login.gif)
 El sistema cuenta con un sistema de `Acceso Rápido` con le cual puede ingresar al sistema para poder probar las funcionalidades hasta el momento agregadas.
 
 # Ingresando como Paciente
-
+![principal](https://github.com/barbosalucas278/imagenes-readme/blob/main/ejemplo-vista-paciente.gif)
 ## Vista Mi Perfil
 
-En esta sección se encontraran con su perfil de usuario, mostrando algunos datos relevantes al usuario.
+- En esta sección se encontraran con su perfil de usuario, mostrando algunos datos relevantes al usuario.
+- Tambien podemos encontrar la historia clínica del paciente, la misma se puede descargar en formato PDF.
 
 ## Vista Mis Turnos
 
@@ -29,10 +30,9 @@ En esta sección se encontraran con su perfil de usuario, mostrando algunos dato
   - Primero elijo la Especialidad.
   - Segundo elijo el Especialista relaiconado a esa especialidad.
   - Tercero elijo el Horario y el Día según la disponibilidad del especialista.
-  - `Los campos no son editables.`
-  - `Para elejir o cambiar los campos del formulario debemos hacer click en el boton verde que se encuentra al lado de cada campo.`
   - Con el boton `Volver a Mis Turnos` volvemos a la vista principal de turnos.
-
+- Filtro de turnos por todos los datos del turno y de la historia clínica referida a ese turno en particular.
+- Se pueden calificar la atención de los especialistas con el boton "Calificar Atención"
 # Ingresando como especialista
 
 ## Vista Mi Perfil
@@ -41,12 +41,12 @@ En esta sección se encontraran con su perfil de usuario, mostrando algunos dato
 - Tambien contraremos `Mis Horarios` donde podremos establecer la disponibilidad horarios que tenemos en nuestras especialidades, establecemos el horario y luego hacemos click en le botón `Establecer`
 
 ## Vista Mis Turnos
-
+![principal](https://github.com/barbosalucas278/imagenes-readme/blob/main/ejemplo-turno-especialista.gif)
 - En esta seccion podemos encontrar los distintos turnos que tenemos asociados al especialistas, podemos hacer diferentes acciones:
-  - Cancelar un turno: si se encuentra en estado `pendiente`.
-  - Rechazar un tunro: si se encuentra en estado `aceptado`.
-  - Aceptar un turno: si se encuentra en estado `pendiente`.
-  - Finalizar un turno: si se encuentra en estado `tomado`.
+  - :red_square: Cancelar un turno: si se encuentra en estado `pendiente`.
+  - :yellow_square: Rechazar un tunro: si se encuentra en estado `aceptado`. 
+  - :blue_square: Aceptar un turno: si se encuentra en estado `pendiente`.
+  - :black_large_square: Finalizar un turno: si se encuentra en estado `tomado`.
   - Ver Reseña de un turno: si este tiene alguna reseña cargada.
 
 # Ingresando como Administrador
@@ -66,3 +66,10 @@ En esta sección se encontraran con su perfil de usuario, mostrando algunos dato
 
 - En esta vista podemos visualizar todos los turnos hasta el momento que se encuentran en el sistema de la clinica.
 - Por el momenot la unica acción que puede hacer el administrador es cancelar un turno si este se encuentra en estado `pendiente`.
+
+## Vista Informes
+
+- En esta sección se pueden encontrar distintos informes administrativos con sus respectivos graficos y y  el registro de los ingresos de los usuarios.
+- Los gráficos se puede Descargar en formato PDF 
+- El registro de ingreso se puede descargar en formato Excel.
+![principal](https://github.com/barbosalucas278/imagenes-readme/blob/main/ejemplo-informes-admin.gif)
