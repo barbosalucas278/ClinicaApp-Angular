@@ -14,12 +14,15 @@ export class CardTurnoComponent implements OnInit {
   resenia: Resenia = {};
   encuesta: Encuesta = {};
   calificacion: string = '';
+  id_turnoActivo?: number;
   constructor(private storageService: StorageService) {
     this.resenia.comentario = '';
     this.resenia.motivo = '';
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.id_turnoActivo = this.turno.id_turno;
+  }
   onCancelarturno(id_turno: number) {
     this.resenia.motivo = 'Cancelado';
     this.storageService.updateEstadoDeUnTurno(Estados.Cancelado, id_turno, [
@@ -34,6 +37,11 @@ export class CardTurnoComponent implements OnInit {
     this.resenia.comentario = '';
   }
   onEnviarCalificacion(id_turno: number) {
-    this.storageService.guardarCalificacionTurno(id_turno, this.calificacion);
+    console.log(this.id_turnoActivo);
+    
+    this.storageService.guardarCalificacionTurno(
+      this.id_turnoActivo!,
+      this.calificacion
+    );
   }
 }

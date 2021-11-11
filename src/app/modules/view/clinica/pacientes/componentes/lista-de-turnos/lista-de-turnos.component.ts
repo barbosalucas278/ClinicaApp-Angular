@@ -54,6 +54,12 @@ export class ListaDeTurnosComponent implements OnInit {
           this.turnosPaciente = T;
           if (this.turnosFiltrados.length == 0) {
             this.turnosFiltrados = this.turnosPaciente;
+          } else {
+            this.turnosFiltrados = this.turnosPaciente.filter((p) =>
+              this.turnosFiltrados.some(
+                (filtrado) => filtrado.id_turno == p.id_turno
+              )
+            );
           }
         }, 500);
       });
