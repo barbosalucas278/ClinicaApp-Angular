@@ -1,0 +1,90 @@
+<div class="container-fluid pt-3">
+  <div class="row">
+    <div class="col-4">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <a (click)="onShowIngresos()">
+            <span class="fs-4 me-5">Ingresos</span>
+          </a>
+        </li>
+        <li class="list-group-item">
+          <a (click)="onShowTurnosPorEspecialidad()">
+            <span class="fs-4">Turnos por Especialidad</span>
+          </a>
+        </li>
+        <li class="list-group-item">
+          <a (click)="onShowTurnosPorDia()">
+            <span class="fs-4">Turnos por día</span>
+          </a>
+        </li>
+        <li class="list-group-item">
+          <a (click)="onShowTurnosPorMedico(false)">
+            <span class="fs-4">Turnos por Médico</span>
+          </a>
+        </li>
+        <li class="list-group-item">
+          <a (click)="onShowTurnosFinalizadosPorMedico(false)">
+            <span class="fs-4">Turnos finalizados por Médico</span>
+          </a>
+        </li>
+        <li *ngIf="showTurnosPorMedico || showTurnosFinalizadosPorMedico">
+          <div
+            class="row border border-success mt-2 justify-content-cente pb-4"
+          >
+            <p class="fs-4 text-center">Seleccione el período</p>
+            <label class="form-label" for="fechaDesde">Desde</label>
+            <div class="input-group mb-3 col-8">
+              <input
+                id="desde"
+                [(ngModel)]="fechaDesdeInput"
+                (change)="onPeriodoChange($event)"
+                class="form-control"
+                type="date"
+              />
+            </div>
+            <label class="form-label" for="fechaHasta">Hasta</label>
+            <div class="input-group col-10">
+              <input
+                id="hasta"
+                [(ngModel)]="fechaHastaInput"
+                (change)="onPeriodoChange($event)"
+                class="form-control"
+                type="date"
+              />
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-8">
+      <app-tabla-ingresos
+        *ngIf="showIngresos"
+        [ingresos]="ingresos"
+      ></app-tabla-ingresos>
+      <app-grafico-torta
+        *ngIf="showTurnosPorEspecialidad"
+        [tituloGrafico]="'Cantidad de turnos por Especialidad'"
+        [chartData]="chartDataSets"
+        [chartLabels]="chartLabels"
+      ></app-grafico-torta>
+      <app-grafico-barras-laterales
+        *ngIf="showTurnosPorDia"
+        [tituloGrafico]="'Cantidad de turnos por Día'"
+        [chartData]="chartDataSets"
+        [chartLabels]="chartLabels"
+      ></app-grafico-barras-laterales>
+      <app-grafico-lineas
+        *ngIf="showTurnosPorMedico"
+        [tituloGrafico]="'Cantidad de turnos por Médico'"
+        [chartData]="chartDataSets"
+        [chartLabels]="chartLabels"
+      ></app-grafico-lineas>
+      <app-grafico-lineas
+        *ngIf="showTurnosFinalizadosPorMedico"
+        [tituloGrafico]="'Cantidad de turnos finalizados por Médico'"
+        [chartData]="chartDataSets"
+        [chartLabels]="chartLabels"
+      ></app-grafico-lineas>
+    </div>
+  </div>
+</div>

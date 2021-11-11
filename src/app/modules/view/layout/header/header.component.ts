@@ -62,6 +62,11 @@ export class HeaderComponent implements OnInit {
       this.router.navigate(['administracion/turnos']);
     }, 500);
   }
+  onInformes() {
+    setTimeout(() => {
+      this.router.navigate(['administracion/informes']);
+    }, 500);
+  }
   onMiPerfil() {
     setTimeout(() => {
       this.router.navigate(['clinica/miperfil']);

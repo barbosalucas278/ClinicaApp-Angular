@@ -1,0 +1,26 @@
+<div class="row">
+    <h2 class="col-10">
+      {{ tituloGrafico }}
+    </h2>
+    <button (click)="descargarPDF()" class="btn btn-sm p-0 col-1">
+      <i
+        class="bi bi-file-earmark-arrow-down text-dark"
+        title="Descargar Historia Clinica"
+        style="font-size: 48px"
+      ></i>
+    </button>
+  </div>
+<div style="display: block" id="contenedorGrafico">
+  <canvas
+    baseChart
+    width="500"
+    height="200"
+    [datasets]="chartData"
+    [labels]="chartLabels"
+    [options]="lineChartOptions"
+    [legend]="lineChartLegend"
+    [chartType]="lineChartType"
+    [plugins]="lineChartPlugins"
+  >
+  </canvas>
+</div>

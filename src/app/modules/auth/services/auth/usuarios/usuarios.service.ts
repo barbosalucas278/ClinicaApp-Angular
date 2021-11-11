@@ -3,9 +3,11 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
+import * as moment from 'moment';
 import { Observable } from 'rxjs/internal/Observable';
 import { Especialidad } from 'src/app/modules/clases/especialidad';
 import { Especialista } from 'src/app/modules/clases/especialista';
+import { LogAcceso } from 'src/app/modules/clases/log-acceso';
 import { Paciente } from 'src/app/modules/clases/paciente';
 import { Usuario } from 'src/app/modules/clases/usuario';
 import { AuthService } from '../auth.service';
@@ -15,8 +17,11 @@ import { AuthService } from '../auth.service';
 })
 export class UsuarioService {
   private usuariosRef: AngularFirestoreCollection;
+  private logRef: AngularFirestoreCollection;
+
   constructor(private db: AngularFirestore) {
     this.usuariosRef = this.db.collection('usuarios');
+    this.logRef = this.db.collection('logAccesos');
   }
   obtenerCurrentUsuario(emailCurrentUser: string) {
     const currentUsuario = this.db.collection('usuarios', (ref) =>
@@ -75,5 +80,19 @@ export class UsuarioService {
       }
       return currentUsuario.update({ especialidad: especialidadesDB });
     }, 500);
+  }
+  guardarLogin(email_usuario: string) {
+    const dia = moment().format('DD-MM-yyyy');
+    const horario = moment().format('hh:mm');
+    let userLog: Usuario;
+    this.obtenerCurrentUsuario(email_usuario).subscribe((user) => {
+      userLog = user[0];
+    });
+    setTimeout(() => {
+      return this.logRef.add({ usuario: userLog, dia: dia, horario: horario });
+    }, 2000);
+  }
+  obtenerIngresos() {
+    return this.logRef.valueChanges() as Observable<LogAcceso[]>;
   }
 }

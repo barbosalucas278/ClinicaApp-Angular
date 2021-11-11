@@ -1,0 +1,28 @@
+<div class="row mt-1">
+  <div class="col-12">
+    <button (click)="descargarExcel()" class="btn btn-warning p-0 me-3">
+      Descargar Ingresos
+      <i
+        class="bi bi-file-earmark-arrow-down text-dark"
+        title="Descarger ingresos"
+        style="font-size: 24px"
+      ></i>
+    </button>
+  </div>
+</div>
+<table class="table" id="tabla-ingresos">
+  <thead>
+    <tr>
+      <th scope="col">Usuario</th>
+      <th scope="col">Dia</th>
+      <th scope="col">Fecha</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let log of ingresos; let i = index">
+      <td>{{ log.usuario!.email }}</td>
+      <td>{{ log.dia }}</td>
+      <td>{{ log.horario }}</td>
+    </tr>
+  </tbody>
+</table>

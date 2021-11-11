@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { Usuario } from '../../clases/usuario';
 import { Validaciones } from '../clases/validaciones';
 import { AuthService } from '../services/auth/auth.service';
+import { UsuarioService } from '../services/auth/usuarios/usuarios.service';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private usuariosService: UsuarioService
   ) {
     this.accesosRapido = [
       {
@@ -90,6 +92,7 @@ export class LoginComponent implements OnInit {
     this.authService
       .signin(email, password)
       .then((usuario) => {
+        this.usuariosService.guardarLogin(usuario.user?.email!);
         this.router.navigate(['home']);
       })
       .catch((error) => {

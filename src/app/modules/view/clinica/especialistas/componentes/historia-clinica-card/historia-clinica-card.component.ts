@@ -7,6 +7,7 @@ import { HistoriaClinica } from 'src/app/modules/clases/historia-clinica';
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 
+
 @Component({
   selector: 'app-historia-clinica-card',
   templateUrl: './historia-clinica-card.component.html',

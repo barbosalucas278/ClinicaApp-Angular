@@ -9,11 +9,13 @@ import { AuthModule } from './modules/auth/auth.module';
 import { FirebaseModule } from './modules/firebase/firebase.module';
 import { ClinicaModule } from './modules/view/clinica/clinica.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ChartsModule,
     FirebaseModule,
     AppRoutingModule,
     LayoutModule,

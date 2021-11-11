@@ -8,6 +8,7 @@ import {
   AngularFireUploadTask,
 } from '@angular/fire/compat/storage';
 import { map } from '@firebase/util';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { Encuesta } from 'src/app/modules/clases/encuesta';
 import { Especialidad } from 'src/app/modules/clases/especialidad';
@@ -16,6 +17,7 @@ import { HistoriaEspecifica } from 'src/app/modules/clases/historia-especifica';
 import { Paciente } from 'src/app/modules/clases/paciente';
 import { Resenia } from 'src/app/modules/clases/resenia';
 import { Turno } from 'src/app/modules/clases/turno';
+import { Usuario } from 'src/app/modules/clases/usuario';
 import { isToken } from 'typescript';
 
 @Injectable({
@@ -25,7 +27,6 @@ export class StorageService {
   private nombreColeccion: string;
   private especialidadesRef: AngularFirestoreCollection;
   private turnosRef: AngularFirestoreCollection;
-
   constructor(
     private storage: AngularFireStorage,
     private db: AngularFirestore
@@ -166,4 +167,6 @@ export class StorageService {
       });
     }, 1000);
   }
+
+  
 }
