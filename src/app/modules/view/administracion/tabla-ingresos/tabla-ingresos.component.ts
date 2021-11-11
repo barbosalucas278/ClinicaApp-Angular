@@ -11,18 +11,7 @@ import { Papa } from 'ngx-papaparse';
 export class TablaIngresosComponent implements OnInit {
   @Input() ingresos: LogAcceso[] = [];
   constructor(private papa: Papa) {}
-  ngOnInit(): void {
-    this.ingresos.sort(function (a: LogAcceso, b: LogAcceso) {
-      const diaA = moment(`${a.dia} ${a.horario}`, 'DD-MM hh:mm');
-      const diaB = moment(`${b.dia} ${b.horario}`, 'DD-MM hh:mm');
-      let ret = -1;
-      if (diaB.diff(diaA) >= 0) {
-        ret = 1;
-      }
-
-      return ret;
-    });
-  }
+  ngOnInit(): void {}
   descargarExcel() {
     const excelObject = this.mapData(this.ingresos);
     const csv = this.papa.unparse({ data: excelObject });

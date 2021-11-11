@@ -83,7 +83,7 @@ export class UsuarioService {
   }
   guardarLogin(email_usuario: string) {
     const dia = moment().format('DD-MM-yyyy');
-    const horario = moment().format('hh:mm');
+    const horario = moment().format('HH:mm');
     let userLog: Usuario;
     this.obtenerCurrentUsuario(email_usuario).subscribe((user) => {
       userLog = user[0];

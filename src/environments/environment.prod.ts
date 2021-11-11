@@ -16,5 +16,5 @@ export const environment = {
   urlImgEspecialista: '../assets/img-especialista.png',
   urlImgSpinner: '../assets/img-spinner.gif',
   urlImgHome: '../assets/img-home.jpg',
-  keyRecaptcha:'6LfH1P0cAAAAAJxsu8eQeb3ODmJUxjpH41NhLkGe'
+  keyRecaptcha:'6LcTWyodAAAAAPUNdpg3GJ-Nk4EMOeIGXNBtYIXI'
 };

@@ -286,6 +286,12 @@
         >
           * La edad minima es de 18 años.
         </div>
+        <div class="input-group">
+          <re-captcha
+            formControlNamme="recaptcha"
+            (resolved)="resolved($event)"
+          ></re-captcha>
+        </div>
         <!-- ErrorMessage Edad END -->
         <div class="input-group mb-5">
           <label for="obraSocial" class="input-group-text">Obra Social</label>
@@ -302,7 +308,7 @@
           <button
             type="submit"
             class="btn btn-success btn-lg col-4"
-            [disabled]="formularioPaciente.invalid && formReCaptcha.invalid"
+            [disabled]="formularioPaciente.invalid"
           >
             Registrarse
           </button>
@@ -548,6 +554,9 @@
         >
           * La edad minima es de 18 años.
         </div>
+        <div class="input-group">
+          <re-captcha formControlNamme="recaptcha"></re-captcha>
+        </div>
         <!-- ErrorMessage Edad END -->
         <div class="input-group mb-5">
           <input formControlName="especialidad" type="text" hidden />
@@ -570,7 +579,7 @@
               </div>
             </div>
           </div>
-          <div class="col-12 autocomplete-casero" *ngIf="mostrarAutocomplete" >
+          <div class="col-12 autocomplete-casero" *ngIf="mostrarAutocomplete">
             <ul>
               <li
                 *ngFor="let especialidad of especialidadesFiltradas"
@@ -596,7 +605,7 @@
           <button
             type="submit"
             class="btn btn-success btn-lg col-4"
-            [disabled]="formularioEspecialista.invalid && formReCaptcha.invalid"
+            [disabled]="formularioEspecialista.invalid"
           >
             Registrarse
           </button>
@@ -841,15 +850,16 @@
         >
           * La edad minima es de 18 años.
         </div>
+        <div class="input-group">
+          <re-captcha formControlNamme="recaptcha"></re-captcha>
+        </div>
         <!-- ErrorMessage Edad END -->
 
         <div class="row justify-content-around">
           <button
             type="submit"
             class="btn btn-success btn-lg col-4"
-            [disabled]="
-              formularioAdministrador.invalid && formReCaptcha.invalid
-            "
+            [disabled]="formularioAdministrador.invalid"
           >
             Registrarse
           </button>
@@ -862,21 +872,6 @@
           </button>
         </div>
       </div>
-    </div>
-  </form>
-  <form
-    [formGroup]="formReCaptcha"
-    *ngIf="tipoUsuario != '' && !mostrarSpinner"
-    class="col-10"
-    style="margin-top: -40px"
-  >
-    <div class="input-group">
-      <ngx-invisible-recaptcha
-        #captchaElem
-        [siteKey]="siteKey"
-        formControlName="recaptcha"
-      >
-      </ngx-invisible-recaptcha>
     </div>
   </form>
 </div>

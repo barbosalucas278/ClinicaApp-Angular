@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReCaptchaV3Service } from 'ngx-captcha';
 import { environment } from 'src/environments/environment';
 import { Administrador } from '../../clases/administrador';
 import { Especialidad } from '../../clases/especialidad';
@@ -45,14 +44,12 @@ export class RegisterComponent implements OnInit {
   formularioAdministrador: FormGroup;
   usuarioAdministrador: Administrador;
   urlImgAdministrador?: File[];
-
-  formReCaptcha: FormGroup;
+  token?: string;
   siteKey: string;
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private reCaptchaV3Service: ReCaptchaV3Service,
     private storageService: StorageService
   ) {
     this.siteKey = environment.keyRecaptcha;
@@ -89,6 +86,7 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validaciones.validarEmail]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       urlImgs: ['', [Validators.required, Validaciones.validarImg]],
+      recaptcha: ['', Validators.required],
     });
     this.formularioEspecialista = this.fb.group({
       nombre: ['', [Validators.required, Validaciones.validarNombre]],
@@ -102,6 +100,7 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validaciones.validarEmail]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       urlImg: ['', [Validators.required, Validaciones.validarImg]],
+      recaptcha: ['', Validators.required],
     });
     this.formularioAdministrador = this.fb.group({
       nombre: ['', [Validators.required, Validaciones.validarNombre]],
@@ -114,10 +113,27 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validaciones.validarEmail]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       urlImg: ['', [Validators.required, Validaciones.validarImg]],
-    });
-    this.formReCaptcha = this.fb.group({
       recaptcha: ['', Validators.required],
     });
+  }
+  resolved(captchaResponse: string) {
+    switch (this.tipoUsuario) {
+      case 'paciente':
+        this.formularioPaciente.controls.recaptcha.setValue(captchaResponse);
+        break;
+      case 'administrador':
+        this.formularioAdministrador.controls.recaptcha.setValue(
+          captchaResponse
+        );
+        break;
+      case 'especialista':
+        this.formularioEspecialista.controls.recaptcha.setValue(
+          captchaResponse
+        );
+        break;
+    }
+
+    this.token = captchaResponse;
   }
   ngOnInit(): void {
     this.storageService.getEspecialidades().subscribe((especialidades) => {
@@ -129,8 +145,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnChanges() {}
   onSubmit() {
-    // if (this.tipoUsuario == 'paciente' && this.formReCaptcha.valid) {
-    if (this.tipoUsuario == 'paciente') {
+    if (this.tipoUsuario == 'paciente' && this.token) {
       const { nombre, apellido, email, edad, dni, password, obraSocial } =
         this.formularioPaciente.value;
       this.usuarioPaciente.nombre = nombre;

@@ -35,6 +35,7 @@ export class InformesComponent implements OnInit {
     this.cargarTurnos();
     this.cargarEspecialidades();
     this.cargaringresos();
+    this.onShowIngresos();
   }
   cargarTurnos() {
     this.storageService.getTurnos().subscribe((T) => {
@@ -55,6 +56,16 @@ export class InformesComponent implements OnInit {
     this.usuariosService.obtenerIngresos().subscribe((i) => {
       this.ingresos = [];
       this.ingresos = i;
+      this.ingresos.sort(function (a: LogAcceso, b: LogAcceso) {
+        const diaA = moment(`${a.dia} ${a.horario}`, 'DD-MM hh:mm');
+        const diaB = moment(`${b.dia} ${b.horario}`, 'DD-MM hh:mm');
+        let ret = -1;
+        if (diaB.diff(diaA) >= 0) {
+          ret = 1;
+        }
+
+        return ret;
+      });
     });
   }
   ocultarTodosLosGraficos() {

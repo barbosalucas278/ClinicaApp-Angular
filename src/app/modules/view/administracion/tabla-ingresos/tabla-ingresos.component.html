@@ -18,7 +18,7 @@
       <th scope="col">Fecha</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="tbody-ingresos">
     <tr *ngFor="let log of ingresos; let i = index">
       <td>{{ log.usuario!.email }}</td>
       <td>{{ log.dia }}</td>
