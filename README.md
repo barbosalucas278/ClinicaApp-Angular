@@ -39,7 +39,7 @@ El sistema cuenta con un sistema de `Acceso Rápido` con le cual puede ingresar 
 
 - En esta sección se encontraran con su perfil de usuario, mostrando algunos datos relevantes al usuario.
 - Tambien contraremos `Mis Horarios` donde podremos establecer la disponibilidad horarios que tenemos en nuestras especialidades, establecemos el horario y luego hacemos click en le botón `Establecer`
-
+![principal](https://github.com/barbosalucas278/imagenes-readme/blob/main/mis-horarios.png)
 ## Vista Mis Turnos
 ![principal](https://github.com/barbosalucas278/imagenes-readme/blob/main/ejemplo-turno-especialista.gif)
 - En esta seccion podemos encontrar los distintos turnos que tenemos asociados al especialistas, podemos hacer diferentes acciones:
@@ -48,7 +48,17 @@ El sistema cuenta con un sistema de `Acceso Rápido` con le cual puede ingresar 
   - :blue_square: Aceptar un turno: si se encuentra en estado `pendiente`.
   - :black_large_square: Finalizar un turno: si se encuentra en estado `tomado`.
   - Ver Reseña de un turno: si este tiene alguna reseña cargada.
+- Se puede filtrar los turnos por especialidad y por todos los datos que el paciente tenga en su historia clinica y sus datos propios.
 
+## Vista Pacientes
+
+- En esta seccion se encuentras todos los pacientes que minimo una vez fueorn atendidos por el especialista.
+- en esta seccion el especialista tiene la posibilidad de dejar una historia clinica relaiconada a el ultimo turno finalizado que tuvo con ese paciente.
+
+Cada historia clinica tiene datos obligatorios y 3 datos dinámicos a eleccion del especialista.
+![principal](https://github.com/barbosalucas278/imagenes-readme/blob/main/alta-historia-clinica.png)
+- Con el boton :red_circle: eliminamos una información extra a la historia clinica
+- Con el boton 🟢 agregamos una nueva información extra.
 # Ingresando como Administrador
 
 ## Vista Mi Perfil
@@ -59,7 +69,9 @@ El sistema cuenta con un sistema de `Acceso Rápido` con le cual puede ingresar 
 
 - En esta sección podemos visualizar una tabla de cada tipo de usuarios filtrandolos por pacientes, especialista o administrador haciendo click en los botonnes con sus respectivos nombre.
 - Haciendo click en el boton `Crear usuario` podemos acceder al menú para crear los 3 tipos de usuario que existen en el sistema siguien las mismas indicaciones de registro de un usuario.
-- En la visualización de la tabla paciente podemos crear un turno asociado a ese paciente haciendo click en el boton verde que se encuentra en su fila correspondiente al usuario. en la vista de crear un turno el boton `Cancelar` nos redirecciona a la tabla de pacientes anteriormente mostrada.
+- En la visualización de la tabla paciente podemos:
+  - crear un turno asociado a ese paciente haciendo click en el boton verde que se encuentra en su fila correspondiente al usuario. en la vista de crear un turno el boton        `Cancelar` nos redirecciona a la tabla de pacientes anteriormente mostrada.
+  - Visualizar la historia clinica del paciente.
 - En la visualización de la tabla de especialista, podemos habilitar o inhabilitar a cada especialista haciendole click al `check VERDE` para habilitar y a la `cruz roja` para inhabilitar al especialista.
 
 ## Vista Turnos
