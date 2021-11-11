@@ -8,7 +8,9 @@ import {
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/modules/auth/services/auth/auth.service';
 import { StorageService } from 'src/app/modules/auth/services/storage/storage.service';
-import { Turno } from 'src/app/modules/clases/turno';
+import { Encuesta } from 'src/app/modules/clases/encuesta';
+import { Resenia } from 'src/app/modules/clases/resenia';
+import { Estados, Turno } from 'src/app/modules/clases/turno';
 
 @Component({
   selector: 'app-lista-de-turnos',
@@ -43,10 +45,17 @@ export class ListaDeTurnosComponent implements OnInit {
   isOpen: boolean = false;
   turnosPaciente: Turno[] = [];
   turnosFiltrados: Turno[] = [];
+  turnoActivo?: Turno;
+  id_turnoActivo?: number;
+  resenia: Resenia = {};
+  encuesta: Encuesta = {};
+  calificacion: string = '';
   constructor(
     private storageService: StorageService,
     private authService: AuthService
   ) {
+    this.resenia.comentario = '';
+    this.resenia.motivo = '';
     this.storageService
       .getTurnosByPaciente(this.authService.currentUser.email)
       .subscribe((T) => {
@@ -61,7 +70,7 @@ export class ListaDeTurnosComponent implements OnInit {
               )
             );
           }
-        }, 500);
+        }, 1000);
       });
   }
   onChangeBusqueda($event: any) {
@@ -90,6 +99,34 @@ export class ListaDeTurnosComponent implements OnInit {
   }
   onBuscar() {
     this.isOpen = !this.isOpen;
+  }
+  onCancelarturno(id_turno: number) {
+    console.log(id_turno);
+
+    this.resenia.motivo = 'Cancelado';
+    this.storageService.updateEstadoDeUnTurno(Estados.Cancelado, id_turno, [
+      this.resenia,
+    ]);
+  }
+  onEnviarEncuesta(id_turno: number) {
+    this.resenia.motivo = 'Cancelado';
+    this.storageService.guardarEncuestaTurno(id_turno, this.encuesta);
+  }
+  onCancelarModalCancelar() {
+    this.resenia.comentario = '';
+  }
+  onEnviarCalificacion(id_turno: number) {
+
+    this.storageService.guardarCalificacionTurno(
+      this.id_turnoActivo!,
+      this.calificacion
+    );
+  }
+  onAccionTurno(turno: Turno) {
+    this.id_turnoActivo = turno.id_turno;
+    this.turnoActivo = this.turnosFiltrados.find(
+      (t) => t.id_turno == this.id_turnoActivo
+    );
   }
   ngOnInit(): void {}
 }
