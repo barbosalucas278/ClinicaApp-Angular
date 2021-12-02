@@ -138,7 +138,8 @@ export class TablaTurnosComponent implements OnInit {
         this.turnosFiltrados = this.turnos.filter(
           (T) =>
             T.especialidad?.startsWith(this.palabraClave) ||
-            T.nombre_especialista?.startsWith(this.palabraClave)
+            T.nombre_especialista?.startsWith(this.palabraClave) ||
+            T.email_especialista?.startsWith(this.palabraClave) 
         );
       } else {
         this.turnosFiltrados = this.turnos.filter((T) => {

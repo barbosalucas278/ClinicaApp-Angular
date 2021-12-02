@@ -99,11 +99,13 @@ export class GrillaPacientesComponent implements OnInit {
           this.palabraClave = arr.join('');
         }
       }
+      const regex = new RegExp('\\b(' + this.palabraClave + ')\\b', 'gi');
 
       this.pacientesFiltrados = this.pacientes.filter(
         (T) =>
           T.apellido?.startsWith(this.palabraClave) ||
-          T.email?.startsWith(this.palabraClave)
+          T.email?.startsWith(this.palabraClave) ||
+          regex.test(JSON.stringify(T))
       );
     } else {
       this.pacientesFiltrados = this.pacientes;
