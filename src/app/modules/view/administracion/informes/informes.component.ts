@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Chart, ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import * as moment from 'moment';
 import { Label, SingleDataSet } from 'ng2-charts';
+import { AnimateGallery } from 'src/app/animations';
 import { UsuarioService } from 'src/app/modules/auth/services/auth/usuarios/usuarios.service';
 import { StorageService } from 'src/app/modules/auth/services/storage/storage.service';
 import { Especialidad } from 'src/app/modules/clases/especialidad';
@@ -12,6 +13,7 @@ import { Turno } from 'src/app/modules/clases/turno';
   selector: 'app-informes',
   templateUrl: './informes.component.html',
   styleUrls: ['./informes.component.scss'],
+  animations: [AnimateGallery],
 })
 export class InformesComponent implements OnInit {
   turnos: Turno[] = [];
@@ -27,6 +29,7 @@ export class InformesComponent implements OnInit {
   //Grafico de lineas
   chartDataSets: ChartDataSets[] = [];
   chartLabels: Label[] = [];
+  showTurnosPordiaHighCharts: boolean = false;
   constructor(
     private storageService: StorageService,
     private usuariosService: UsuarioService
@@ -74,6 +77,8 @@ export class InformesComponent implements OnInit {
     this.showTurnosPorDia = false;
     this.showTurnosPorMedico = false;
     this.showTurnosFinalizadosPorMedico = false;
+    this.showTurnosPordiaHighCharts = false;
+
     this.resetearPArametrosGraficos();
   }
   resetearPArametrosGraficos() {
@@ -142,6 +147,43 @@ export class InformesComponent implements OnInit {
 
     this.setLineDataSet(datos);
     this.showTurnosPorDia = true;
+  }
+  onShowTurnosPorDiaHighCharts() {
+    this.ocultarTodosLosGraficos();
+    this.fechaDesdeInput = undefined;
+    this.fechaHastaInput = undefined;
+
+    this.calcularPeriodoDeDias();
+
+    const turnosFiltrados = this.turnos.filter(
+      (T) =>
+        moment(T.dia, 'DD-MM') >= moment(this.fechaDesdeInput, 'DD-MM') &&
+        moment(T.dia, 'DD-MM') <= moment(this.fechaHastaInput, 'DD-MM')
+    );
+    const datos: ChartDataSets[] = [];
+    for (const dia of this.chartLabels) {
+      if (datos.length == 0) {
+        let cantidad = 0;
+        turnosFiltrados.forEach((element) => {
+          if (element.dia === dia) {
+            cantidad++;
+          }
+        });
+
+        datos.push({ label: 'turnos', data: [cantidad] });
+      } else {
+        let cantidad = 0;
+        turnosFiltrados.forEach((element) => {
+          if (element.dia === dia) {
+            cantidad++;
+          }
+        });
+        datos.find((d) => d.label == 'turnos')?.data?.push(cantidad);
+      }
+    }
+
+    this.setLineDataSet(datos);
+    this.showTurnosPordiaHighCharts = true;
   }
   onShowTurnosPorMedico(actualizacion: boolean) {
     this.ocultarTodosLosGraficos();
@@ -278,7 +320,7 @@ export class InformesComponent implements OnInit {
       const fechaHastaDefault = moment(
         fechaDeHoy.format('DD-MM-yyyy'),
         'DD-MM-yyyy'
-      ).add(10, 'days');
+      ).add(15, 'days');
       const fechaHasta =
         this.fechaHastaInput != undefined
           ? moment(this.fechaHastaInput!, 'DD-MM')

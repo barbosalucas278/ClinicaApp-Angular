@@ -15,7 +15,12 @@ import { TablaIngresosComponent } from './tabla-ingresos/tabla-ingresos.componen
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [UsuariosAdminComponent, TurnosAdminComponent, InformesComponent, TablaIngresosComponent],
+  declarations: [
+    UsuariosAdminComponent,
+    TurnosAdminComponent,
+    InformesComponent,
+    TablaIngresosComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,

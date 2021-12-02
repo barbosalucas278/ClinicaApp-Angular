@@ -48,155 +48,130 @@
 <div class="mt-5">
   <app-register *ngIf="showRegistrar" [adminPanel]="true"></app-register>
 </div>
-<table
+<app-grilla-pacientes
   *ngIf="
     tablaActiva == 'paciente' &&
     !showRegistrar &&
     !showAltaTurno &&
-    !showMiHistoriaClinica
+    !showMiHistoriaClinica &&
+    !showTablaTurnos
   "
-  class="table"
-  id="tabla-paciente"
->
-  <thead>
-    <tr>
-      <th scope="col">Nombre</th>
-      <th scope="col">Apellido</th>
-      <th scope="col">DNI</th>
-      <th scope="col">Obra Social</th>
-      <th scope="col">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of usuariosFiltrados; let i = index">
-      <td>{{ user.nombre }}</td>
-      <td>{{ user.apellido }}</td>
-      <td>{{ user.dni }}</td>
-      <td>{{ user.obraSocial }}</td>
-      <th scope="row">
-        <button (click)="onAgregarTurno(user)" class="btn btn-sm p-0">
-          <i
-            id="{{ i }}BtnAgregarTurno"
-            class="bi bi-plus-square-fill"
-            title="Agregar turno"
-            style="color: green; font-size: 24px"
-          ></i>
-        </button>
-        <button (click)="onShowHistoriaClinica(user)" class="btn btn-sm p-0">
-          <i
-            id="{{ i }}BtnVerReseniaHistoriaClinica"
-            class="bi bi-journal-text text-dark"
-            title="Agregar Historia Clinica"
-            style="font-size: 24px"
-          ></i>
-        </button>
-      </th>
-    </tr>
-  </tbody>
-</table>
-<table
+  [adminPanel]="true"
+  (showHistoriaClinicaEvent)="onShowHistoriaClinica($event)"
+  (agregarTurnoEvent)="onAgregarTurno($event)"
+  (showTurnosPacienteEvent)="onShowTurnosPaciente($event)"
+></app-grilla-pacientes>
+
+<section
   *ngIf="
     tablaActiva == 'especialista' &&
     !showRegistrar &&
     !showAltaTurno &&
     !showMiHistoriaClinica
   "
-  class="table"
-  id="tabla-especialista"
+  [@animateGallery]="'slideInRight'"
 >
-  <thead>
-    <tr>
-      <th scope="col">Nombre</th>
-      <th scope="col">Apellido</th>
-      <th scope="col">DNI</th>
-      <th scope="col">Especialidad</th>
-      <th scope="col">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of usuariosFiltrados; let i = index">
-      <td>{{ user.nombre }}</td>
-      <td>{{ user.apellido }}</td>
-      <td>{{ user.dni }}</td>
-      <td>{{ user.especialidad | especialidadesToString }}</td>
-      <td class="p-0 m-0">
-        <button
-          class="btn btn-sm p-0"
-          *ngIf="user.aprobado"
-          (click)="onInhabilitarEspecialista(user.email, i, $event)"
-        >
-          <i
-            id="{{ i }}BtnHabilitarEspecialista"
-            class="bi bi-x-square-fill"
-            title="Inhabilitar"
-            style="color: red; font-size: 24px"
-          ></i>
-        </button>
-        <button
-          class="btn btn-sm p-0"
-          *ngIf="!user.aprobado"
-          (click)="onHabilitarEspecialista(user.email, i, $event)"
-        >
-          <i
-            id="{{ i }}BtnInhabilitarEspecialista"
-            class="bi bi-check-square-fill"
-            title="Habilitar"
-            style="color: green; font-size: 24px"
-          ></i>
-        </button>
-        <div class="spinnerChico">
-          <spinner hidden id="{{ i }}EspecialistaAdmin"></spinner>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<table
+  <table class="table" id="tabla-especialista">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Especialidad</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of usuariosFiltrados; let i = index">
+        <td>{{ user.nombre }}</td>
+        <td>{{ user.apellido }}</td>
+        <td>{{ user.dni }}</td>
+        <td>{{ user.especialidad | especialidadesToString }}</td>
+        <td class="p-0 m-0">
+          <button
+            class="btn btn-sm p-0"
+            *ngIf="user.aprobado"
+            (click)="onInhabilitarEspecialista(user.email, i, $event)"
+          >
+            <i
+              id="{{ i }}BtnHabilitarEspecialista"
+              class="bi bi-x-square-fill"
+              title="Inhabilitar"
+              style="color: red; font-size: 24px"
+            ></i>
+          </button>
+          <button
+            class="btn btn-sm p-0"
+            *ngIf="!user.aprobado"
+            (click)="onHabilitarEspecialista(user.email, i, $event)"
+          >
+            <i
+              id="{{ i }}BtnInhabilitarEspecialista"
+              class="bi bi-check-square-fill"
+              title="Habilitar"
+              style="color: green; font-size: 24px"
+            ></i>
+          </button>
+          <div class="spinnerChico">
+            <spinner hidden id="{{ i }}EspecialistaAdmin"></spinner>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+<section
+  [@animateGallery]="'slideInRight'"
   *ngIf="
     tablaActiva == 'administrador' &&
     !showRegistrar &&
     !showAltaTurno &&
     !showMiHistoriaClinica
   "
-  class="table"
-  id="tabla-administrador"
 >
-  <thead>
-    <tr>
-      <th scope="col">Nombre</th>
-      <th scope="col">Apellido</th>
-      <th scope="col">DNI</th>
-      <th scope="col">Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of usuariosFiltrados">
-      <td>{{ user.nombre }}</td>
-      <td>{{ user.apellido }}</td>
-      <td>{{ user.dni }}</td>
-      <th scope="row">1</th>
-    </tr>
-  </tbody>
-</table>
-
+  <table class="table" id="tabla-administrador">
+    <thead>
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Apellido</th>
+        <th scope="col">DNI</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of usuariosFiltrados">
+        <td>{{ user.nombre }}</td>
+        <td>{{ user.apellido }}</td>
+        <td>{{ user.dni }}</td>
+        <th scope="row">1</th>
+      </tr>
+    </tbody>
+  </table>
+</section>
 <div class="row justify-content-center">
   <app-historia-clinica-card
     *ngIf="showMiHistoriaClinica"
     [email_paciente]="emailPaciente"
   ></app-historia-clinica-card>
-  <button
-    *ngIf="showMiHistoriaClinica"
-    class="btn btn-danger col-4 mt-3"
-    (click)="volverAlMenuPrincipal()"
-  >
-    Volver
-  </button>
+
   <app-alta-turno
     [emailPacienteInput]="emailPaciente"
     [nombrePacienteInput]="nombrePaciente"
     *ngIf="showAltaTurno"
     (procesoDeAltaTerminado)="onProcesoDeAltaTerminado()"
   ></app-alta-turno>
+  <app-tabla-turnos
+    *ngIf="showTablaTurnos"
+    [adminPanel]="true"
+    [pacienteEspecifico]="emailPaciente"
+  ></app-tabla-turnos>
+  <button
+    *ngIf="showMiHistoriaClinica || showTablaTurnos"
+    class="btn btn-danger col-4 mt-3"
+    (click)="volverAlMenuPrincipal()"
+  >
+    Volver
+  </button>
   <button
     *ngIf="showAltaTurno"
     class="btn btn-danger col-4 mt-3"

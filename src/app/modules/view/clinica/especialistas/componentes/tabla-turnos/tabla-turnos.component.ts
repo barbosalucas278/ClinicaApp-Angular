@@ -7,9 +7,12 @@ import {
   trigger,
 } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
+import { AnimateGallery } from 'src/app/animations';
 import { AuthService } from 'src/app/modules/auth/services/auth/auth.service';
 import { StorageService } from 'src/app/modules/auth/services/storage/storage.service';
+import { Paciente } from 'src/app/modules/clases/paciente';
 import { Resenia } from 'src/app/modules/clases/resenia';
 import { Estados, Turno } from 'src/app/modules/clases/turno';
 
@@ -40,10 +43,12 @@ import { Estados, Turno } from 'src/app/modules/clases/turno';
         ]),
       ]),
     ]),
+    AnimateGallery,
   ],
 })
 export class TablaTurnosComponent implements OnInit {
   @Input() adminPanel: boolean;
+  @Input() pacienteEspecifico?: string;
   turnosTotal = -1;
   turnos: Turno[] = [];
   turnosFiltrados: Turno[] = [];
@@ -71,6 +76,7 @@ export class TablaTurnosComponent implements OnInit {
           this.filtrarLosTurnos();
         }
         this.turnosTotal = this.turnosFiltrados.length;
+        this.turnosFiltrados.sort(ordenarTurnos);
       });
   }
   onBtnCancelar(turno: Turno) {
@@ -153,16 +159,44 @@ export class TablaTurnosComponent implements OnInit {
   ngOnInit(): void {
     if (this.adminPanel) {
       this.suscripcionEspecialista.unsubscribe();
-      this.storageService.getTurnos().subscribe((T) => {
-        this.turnos = [];
-        this.turnos = T;
-        if (this.turnosFiltrados.length == 0) {
-          this.turnosFiltrados = this.turnos;
-        } else {
-          this.turnosFiltrados = this.turnos;
-          this.filtrarLosTurnos();
-        }
-      });
+      if (this.pacienteEspecifico) {
+        this.storageService.getTurnos().subscribe((T) => {
+          this.turnos = [];
+          this.turnos = T.filter(
+            (turno) => turno.email_paciente == this.pacienteEspecifico
+          );
+          if (this.turnosFiltrados.length == 0) {
+            this.turnosFiltrados = this.turnos;
+          } else {
+            this.turnosFiltrados = this.turnos;
+            this.filtrarLosTurnos();
+          }
+        });
+      } else {
+        this.storageService.getTurnos().subscribe((T) => {
+          this.turnos = [];
+          this.turnos = T;
+          if (this.turnosFiltrados.length == 0) {
+            this.turnosFiltrados = this.turnos;
+            console.log(this.turnosFiltrados);
+
+          } else {
+            this.turnosFiltrados = this.turnos;
+            this.filtrarLosTurnos();
+          }
+        });
+      }
+      this.turnosFiltrados.sort(ordenarTurnos);
     }
   }
+}
+function ordenarTurnos(a: Turno, b: Turno) {
+  const diaA = moment(`${a.dia} ${a.horario}`, 'DD-MM hh:mm');
+  const diaB = moment(`${b.dia} ${b.horario}`, 'DD-MM hh:mm');
+  let ret = -1;
+  if (diaB.diff(diaA) >= 0) {
+    ret = 1;
+  }
+
+  return ret;
 }

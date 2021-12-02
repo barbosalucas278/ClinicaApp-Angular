@@ -129,7 +129,7 @@ export class StorageService {
   }
   getTurnos() {
     const turnosFiltrados = this.db.collection('turnos', (ref) =>
-      ref.limit(25).orderBy('dia', 'desc')
+      ref.orderBy('dia', 'asc')
     );
     return turnosFiltrados.valueChanges() as Observable<Turno[]>;
   }

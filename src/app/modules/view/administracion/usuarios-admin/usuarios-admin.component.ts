@@ -5,11 +5,13 @@ import { UsuarioService } from 'src/app/modules/auth/services/auth/usuarios/usua
 import { Paciente } from 'src/app/modules/clases/paciente';
 import * as moment from 'moment';
 import { Papa } from 'ngx-papaparse';
+import { AnimateGallery } from 'src/app/animations';
 
 @Component({
   selector: 'app-usuarios-admin',
   templateUrl: './usuarios-admin.component.html',
   styleUrls: ['./usuarios-admin.component.scss'],
+  animations: [AnimateGallery],
 })
 export class UsuariosAdminComponent implements OnInit {
   emailPaciente: string;
@@ -21,6 +23,7 @@ export class UsuariosAdminComponent implements OnInit {
   tablaActiva: string;
   showRegistrar: boolean;
   showMiHistoriaClinica: boolean;
+  showTablaTurnos: boolean;
   constructor(
     private userService: UsuarioService,
     private authService: AuthService,
@@ -29,6 +32,7 @@ export class UsuariosAdminComponent implements OnInit {
     this.showMiHistoriaClinica = false;
     this.showAltaTurno = false;
     this.showRegistrar = false;
+    this.showTablaTurnos = false;
     this.mostrarSpinner = false;
     this.usuarios = [];
     this.usuariosFiltrados = [];
@@ -71,6 +75,10 @@ export class UsuariosAdminComponent implements OnInit {
   showCrearUsuario() {
     this.tablaActiva = '';
     this.showRegistrar = true;
+  }
+  onShowTurnosPaciente(email: string) {
+    this.emailPaciente = email;
+    this.showTablaTurnos = true;
   }
   cancelarCrearUsuario() {
     this.tablaActiva = 'paciente';
@@ -118,6 +126,7 @@ export class UsuariosAdminComponent implements OnInit {
   volverAlMenuPrincipal() {
     this.emailPaciente = '';
     this.showMiHistoriaClinica = false;
+    this.showTablaTurnos = false;
   }
   onProcesoDeAltaTerminado() {
     this.showAltaTurno = false;

@@ -1,0 +1,117 @@
+<div class="card" style="width: 18rem">
+  <img
+    [src]="paciente!.urlImgs![0] | getDownloadURL"
+    class="contenedor-redondo-small"
+  />
+  <div class="card-body">
+    <h5 class="card-title">{{ paciente! | nombreYApellido }}</h5>
+    <section *ngIf="paciente && !adminPanel; else showAdminPanel">
+      <section *ngIf="showPortada">
+        <p *ngIf="ultimosTurnos!.length > 0; else noTieneTurnosTomados">
+          Últimos turnos
+        </p>
+        <ng-template #noTieneTurnosTomados>
+          <p>No tiene turnos tomados</p>
+        </ng-template>
+        <ul>
+          <li *ngFor="let turno of ultimosTurnos">
+            {{ turno.dia }} - {{ turno.especialidad }}
+            <button
+              (click)="onShowHistoriaClinica(turno)"
+              class="btn btn-sm p-0"
+              *ngIf="turno.historiaClinicaCargada"
+            >
+              <i
+                class="bi bi-journal-text text-dark"
+                title="Ver Historia Clinica"
+                style="font-size: 24px"
+              ></i>
+            </button>
+          </li>
+        </ul>
+        <button
+          *ngIf="tieneTurnosSinHistoriaClinica"
+          class="btn btn-sm p-0 btn-outline-primary"
+          (click)="onDejarHistoriaClinica()"
+        >
+          Dejar Historia Clínica
+          <i
+            class="bi bi-file-earmark-plus-fill"
+            title="Agregar Historia Clinica"
+            style="font-size: 24px"
+          ></i>
+        </button>
+      </section>
+    </section>
+    <ng-template #showAdminPanel>
+      <ul>
+        <li>Obra social: {{ paciente!.obraSocial }}</li>
+        <li>DNI: {{ paciente!.dni }}</li>
+      </ul>
+      <div class="row">
+        <div class="col-12">
+          <ul>
+            <li>
+              Ver Turnos Tomados
+              <button (click)="onVerTurnos()" class="btn btn-sm p-0">
+                <i
+                  class="bi bi-calendar-check-fill"
+                  title="Agregar turno"
+                  style="color: blue; font-size: 24px"
+                ></i>
+              </button>
+            </li>
+            <li>
+              Agregar Turno
+              <button (click)="onAgregarTurno()" class="btn btn-sm p-0">
+                <i
+                  class="bi bi-plus-square-fill"
+                  title="Agregar turno"
+                  style="color: green; font-size: 24px"
+                ></i>
+              </button>
+            </li>
+            <li *ngIf="paciente!.historiaClinica">
+              Ver Historia Clinica
+              <button (click)="onShowHistoriaClinica()" class="btn btn-sm p-0">
+                <i
+                  class="bi bi-journal-text text-dark"
+                  title="Ver Historia Clinica"
+                  style="font-size: 24px"
+                ></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-template>
+    <section *ngIf="showHistoriaClinica && !adminPanel">
+      <p>{{ turnoActivo!.dia }} - {{ turnoActivo!.especialidad }}</p>
+      <ul *ngIf="turnoActivo!.historiaClinicaCargada; else elseBlock">
+        <li>Altura: {{ turnoActivo!.historiaClinica!.altura! }} Cm.</li>
+        <li>Peso: {{ turnoActivo!.historiaClinica!.peso! }} Kg.</li>
+        <li>Presion: {{ turnoActivo!.historiaClinica!.presion! }}</li>
+        <li>
+          Temperatura: {{ turnoActivo!.historiaClinica!.temperatura! }} C°
+        </li>
+        <li
+          *ngFor="
+            let historia of turnoActivo!.historiaClinica!.historiasEspecificas!
+          "
+        >
+          <p *ngFor="let item of historia!.especificaciones">
+            {{ item.detalle }} : {{ item.dato }}
+          </p>
+        </li>
+      </ul>
+      <ng-template #elseBlock>
+        <ul>
+          <li>No tiene historia clinica cargada</li>
+        </ul>
+      </ng-template>
+      <button class="btn btn-sm p-0 btn-outline-primary" (click)="onVolver()">
+        Volver
+      </button>
+    </section>
+  </div>
+</div>

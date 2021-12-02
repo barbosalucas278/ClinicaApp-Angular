@@ -1,0 +1,60 @@
+<div
+  class="container py-1"
+  *ngIf="!showAltaHistoriaClinica"
+  [@animateGallery]="'slideInUp'"
+>
+  <header class="pb-3 mb-4 border-bottom">
+    <h2>
+      <a class="d-flex align-items-center text-dark text-decoration-none">
+        Pacientes
+      </a>
+    </h2>
+  </header>
+  <div class="container-fluid mb-5">
+    <div class="row">
+      <div class="col-6">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Buscar por especialidad o paciente"
+          aria-label="Search"
+          (keyup)="onChangeBusqueda($event)"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="!adminPanel; else elseAdmin">
+    <app-paciente-card
+      [@animateGallery]="'slideInDown'"
+      class="col-4"
+      *ngFor="let paciente of pacientesFiltrados"
+      [paciente]="paciente"
+      [tieneTurnosSinHistoriaClinica]="tieneTurnosSinHistoriaClinica(paciente)"
+      [ultimosTurnos]="turnos | ultimosTurnos: paciente"
+      (dejarHistoriaClinicaEvent)="onDejarHistoriaClinica($event)"
+    ></app-paciente-card>
+  </div>
+  <ng-template #elseAdmin>
+    <div class="row">
+      <app-paciente-card
+        [@animateGallery]="'slideInDown'"
+        class="col-4"
+        *ngFor="let paciente of pacientesFiltrados"
+        [paciente]="paciente"
+        [adminPanel]="adminPanel"
+        (showHistoriaClinicaEvent)="onShowHistoriaClinica($event)"
+        (agregarTurnoEvent)="onAgregarTurno($event)"
+        (showTurnosPacienteEvent)="onShowTurnosPaciente($event)"
+      ></app-paciente-card>
+    </div>
+  </ng-template>
+</div>
+<div class="row justify-content-center">
+  <app-alta-historia-clinica
+    class="col-12"
+    *ngIf="showAltaHistoriaClinica"
+    [paciente]="paciente_activo"
+    [turno]="turno_activo"
+    (procesoDeAltaTerminado)="onCargaHistoriaClinicaEnd()"
+  ></app-alta-historia-clinica>
+</div>

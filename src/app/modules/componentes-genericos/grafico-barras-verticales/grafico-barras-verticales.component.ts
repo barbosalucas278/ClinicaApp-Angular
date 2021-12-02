@@ -7,11 +7,11 @@ import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-grafico-barras-laterales',
-  templateUrl: './grafico-barras-laterales.component.html',
-  styleUrls: ['./grafico-barras-laterales.component.scss'],
+  selector: 'app-grafico-barras-verticales',
+  templateUrl: './grafico-barras-verticales.component.html',
+  styleUrls: ['./grafico-barras-verticales.component.scss'],
 })
-export class GraficoBarrasLateralesComponent implements OnInit {
+export class GraficoBarrasVerticalesComponent implements OnInit {
   @Input() tituloGrafico!: string;
   @Input() chartData: ChartDataSets[] = [];
   @Input() chartLabels: Label[] = [];

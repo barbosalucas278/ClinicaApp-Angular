@@ -1,6 +1,6 @@
 <div class="container-fluid pt-3">
   <div class="row">
-    <div class="col-4">
+    <div class="col-4" [@animateGallery]="'slideInLeft'">
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           <a (click)="onShowIngresos()">
@@ -15,6 +15,11 @@
         <li class="list-group-item">
           <a (click)="onShowTurnosPorDia()">
             <span class="fs-4">Turnos por día</span>
+          </a>
+        </li>
+        <li class="list-group-item">
+          <a (click)="onShowTurnosPorDiaHighCharts()">
+            <span class="fs-4">Turnos por día HighCharts</span>
           </a>
         </li>
         <li class="list-group-item">
@@ -58,6 +63,7 @@
     </div>
     <div class="col-8">
       <app-tabla-ingresos
+        [@animateGallery]="'slideInRight'"
         *ngIf="showIngresos"
         [ingresos]="ingresos"
       ></app-tabla-ingresos>
@@ -67,12 +73,18 @@
         [chartData]="chartDataSets"
         [chartLabels]="chartLabels"
       ></app-grafico-torta>
-      <app-grafico-barras-laterales
+      <app-grafico-barras-verticales
         *ngIf="showTurnosPorDia"
         [tituloGrafico]="'Cantidad de turnos por Día'"
         [chartData]="chartDataSets"
         [chartLabels]="chartLabels"
-      ></app-grafico-barras-laterales>
+      ></app-grafico-barras-verticales>
+      <app-grafico-barras-highcharts
+        *ngIf="showTurnosPordiaHighCharts"
+        [tituloGrafico]="'Cantidad de turnos por Día HighCharts'"
+        [chartData]="chartDataSets"
+        [chartLabels]="chartLabels"
+      ></app-grafico-barras-highcharts>
       <app-grafico-lineas
         *ngIf="showTurnosPorMedico"
         [tituloGrafico]="'Cantidad de turnos por Médico'"

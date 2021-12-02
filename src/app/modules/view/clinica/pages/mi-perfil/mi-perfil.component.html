@@ -7,24 +7,38 @@
       (click)="onShowMisHorarios()"
       *ngIf="currentUser.tipoUsuario == 'especialista'"
     >
-      <span class="fs-4">Mis Horarios</span>
+      <span class="fs-4 me-5">Mis Horarios</span>
     </a>
     <a
       (click)="onShowMiHistoriaClinica()"
       *ngIf="currentUser.tipoUsuario == 'paciente'"
     >
-      <span class="fs-4">Mi Historia Clínica</span>
+      <span class="fs-4 me-5">Mi Historia Clínica</span>
+    </a>
+    <a
+      (click)="onShowTurnosPaciente()"
+      *ngIf="currentUser.tipoUsuario == 'paciente'"
+    >
+      <span class="fs-4">Registro de Turnos</span>
     </a>
   </header>
   <app-mis-horarios
+    [@animateGallery]="'slideInRight'"
     [especialista]="currentUser"
     *ngIf="showMisHorarios && currentUser.tipoUsuario == 'especialista'"
   ></app-mis-horarios>
   <app-historia-clinica-card
+    [@animateGallery]="'slideInRight'"
     *ngIf="showMiHistoriaClinica"
     [email_paciente]="currentUser.email"
   ></app-historia-clinica-card>
+  <app-turnos-paciente
+    [@animateGallery]="'fadeIn'"
+    *ngIf="showTurnosPaciente"
+    [email_paciente]="currentUser.email"
+  ></app-turnos-paciente>
   <app-perfil
+    [@animateGallery]="'slideInLeft'"
     [currentUser]="currentUser"
     *ngIf="showMiPerfil && currentUser"
   ></app-perfil>

@@ -35,6 +35,7 @@
         <th scope="col">Horario</th>
         <th scope="col">Paciente</th>
         <th scope="col">Especialidad</th>
+        <th *ngIf="adminPanel" scope="col">Especialista</th>
         <th scope="col">Estado</th>
         <th scope="col">Acciones</th>
       </tr>
@@ -45,6 +46,7 @@
         <td>{{ turno.horario }}</td>
         <td>{{ turno.nombre_paciente }}</td>
         <td>{{ turno.especialidad }}</td>
+        <td *ngIf="adminPanel">{{ turno.email_especialista }}</td>
         <td>
           <h4>
             <span [appBackgroundEstado]="turno.estado!">

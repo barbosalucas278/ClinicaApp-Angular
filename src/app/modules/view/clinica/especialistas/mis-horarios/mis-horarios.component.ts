@@ -11,13 +11,11 @@ import { Especialista } from 'src/app/modules/clases/especialista';
 export class MisHorariosComponent implements OnInit {
   @Input() especialista!: Especialista;
   listaDeEspecialidades: Especialidad[] = [];
-  constructor(private userService: UsuarioService) {
-    setTimeout(() => {
-      this.listaDeEspecialidades = [];
-      this.listaDeEspecialidades.push(...this.especialista.especialidad!);
-    }, 500);
+  constructor(private userService: UsuarioService) {}
+  ngOnInit(): void {
+    this.listaDeEspecialidades = [];
+    this.listaDeEspecialidades.push(...this.especialista.especialidad!);
   }
-  ngOnInit(): void {}
   onHorarioEstablecido(especialidadEstablecida: Especialidad) {
     this.userService.actualizarDisponibilidadHorariaEspecialista(
       this.especialista.email!,

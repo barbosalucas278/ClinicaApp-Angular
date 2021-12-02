@@ -7,7 +7,6 @@ import { HistoriaClinica } from 'src/app/modules/clases/historia-clinica';
 import * as moment from 'moment';
 import { environment } from 'src/environments/environment';
 
-
 @Component({
   selector: 'app-historia-clinica-card',
   templateUrl: './historia-clinica-card.component.html',
@@ -19,11 +18,7 @@ export class HistoriaClinicaCardComponent implements OnInit {
   mostrarSpinner: boolean = true;
   imgLogoEmpresa: string = environment.urlImgLogoEmpresa;
   nombreCompletoPaciente: string = '';
-  constructor(private usuariosService: UsuarioService) {
-    setTimeout(() => {
-      this.cargarPaciente();
-    }, 1000);
-  }
+  constructor(private usuariosService: UsuarioService) {}
   cargarPaciente() {
     this.usuariosService.obtenerPaciente(this.email_paciente).subscribe((P) => {
       this.historiaClinica = P[0].historiaClinica!;
@@ -31,7 +26,9 @@ export class HistoriaClinicaCardComponent implements OnInit {
       this.nombreCompletoPaciente = `${P[0].nombre}, ${P[0].apellido}`;
     });
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.cargarPaciente();
+  }
   descargarPDF() {
     let DATA = document.getElementById(`contenedorHistoria`);
 
@@ -42,9 +39,13 @@ export class HistoriaClinicaCardComponent implements OnInit {
       const FILEURI = canvas.toDataURL('image/png');
       let PDF = new jsPDF('p', 'mm', 'a4');
       let positionImagen = 50;
-      PDF.addImage(this.imgLogoEmpresa, 'PNG',140, 0, 50, 50);
+      PDF.addImage(this.imgLogoEmpresa, 'PNG', 140, 0, 50, 50);
       PDF.text(`Fecha de emisión: ${moment().format('DD-MM-yyy')}`, 10, 30);
-      PDF.text(`Historia Clínica del paciente: ${this.nombreCompletoPaciente}`, 10, 40);
+      PDF.text(
+        `Historia Clínica del paciente: ${this.nombreCompletoPaciente}`,
+        10,
+        40
+      );
       PDF.addImage(FILEURI, 'PNG', 0, positionImagen, fileWidth, fileHeight);
 
       PDF.save(

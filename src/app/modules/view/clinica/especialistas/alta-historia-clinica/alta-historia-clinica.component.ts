@@ -30,6 +30,15 @@ export class AltaHistoriaClinicaComponent implements OnInit {
   showExtra3: boolean;
   extra3: string = '';
   deta3: string = '';
+  showExtra4: boolean;
+  extra4: string = '';
+  deta4: string = '';
+  showExtra5: boolean;
+  extra5: string = '';
+  deta5: string = '';
+  showExtra6: boolean;
+  extra6: string = '';
+  deta6: string = '';
   constructor(
     private userService: UsuarioService,
     private fb: FormBuilder,
@@ -37,8 +46,11 @@ export class AltaHistoriaClinicaComponent implements OnInit {
   ) {
     this.historiaClinica.historiasEspecificas = [];
     this.showExtra1 = true;
-    this.showExtra2 = false;
-    this.showExtra3 = false;
+    this.showExtra2 = true;
+    this.showExtra3 = true;
+    this.showExtra4 = true;
+    this.showExtra5 = true;
+    this.showExtra6 = true;
 
     this.formularioHistoriaClinica = this.fb.group({
       altura: [, Validators.required],
@@ -48,7 +60,6 @@ export class AltaHistoriaClinicaComponent implements OnInit {
     });
   }
   onShowExtra2() {
-    this.showExtra1 = false;
     this.showExtra2 = true;
   }
   onCleanExtra2() {
@@ -56,14 +67,40 @@ export class AltaHistoriaClinicaComponent implements OnInit {
     this.deta2 = '';
     this.showExtra2 = false;
   }
+  onShowExtra3() {
+    this.showExtra1 = false;
+    this.showExtra3 = true;
+  }
   onCleanExtra3() {
     this.extra3 = '';
     this.deta3 = '';
     this.showExtra3 = false;
   }
-  onShowExtra3() {
-    this.showExtra3 = true;
+  onShowExtra4() {
+    this.showExtra4 = true;
   }
+  onCleanExtra4() {
+    this.extra4 = '';
+    this.deta4 = '';
+    this.showExtra4 = false;
+  }
+  onShowExtra5() {
+    this.showExtra5 = true;
+  }
+  onCleanExtra5() {
+    this.extra5 = '';
+    this.deta5 = '';
+    this.showExtra5 = false;
+  }
+  onShowExtra6() {
+    this.showExtra6 = true;
+  }
+  onCleanExtra6() {
+    this.extra6 = '';
+    this.deta6 = '';
+    this.showExtra6 = false;
+  }
+
   onSubmit() {
     this.formCheck = false;
     const { altura, peso, temperatura, presion } =
@@ -96,6 +133,28 @@ export class AltaHistoriaClinicaComponent implements OnInit {
         dato: this.extra3,
       });
     }
+    if (this.deta4 != '' && this.extra4 != '') {
+      newHistoriaEspecifica.especificaciones?.push({
+        detalle: this.deta4,
+        dato: this.extra4,
+      });
+    }
+    if (this.deta5 != '' && this.extra5 != '') {
+      newHistoriaEspecifica.especificaciones?.push({
+        detalle: this.deta5,
+        dato: this.extra5,
+      });
+    }
+    if (this.deta6 != '' && this.extra6 != '') {
+      let valor6: string = 'no';
+      if (this.extra6) {
+        valor6 = 'si';
+      }
+      newHistoriaEspecifica.especificaciones?.push({
+        detalle: this.deta6,
+        dato: valor6,
+      });
+    }
 
     this.historiaClinica.historiasEspecificas?.push(newHistoriaEspecifica);
 
@@ -115,5 +174,18 @@ export class AltaHistoriaClinicaComponent implements OnInit {
   onCancelar() {
     this.procesoDeAltaTerminado.emit(true);
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.formularioHistoriaClinica.controls['altura'].setValue(
+      this.paciente.historiaClinica!?.altura
+    );
+    this.formularioHistoriaClinica.controls['peso'].setValue(
+      this.paciente.historiaClinica!?.peso
+    );
+    this.formularioHistoriaClinica.controls['temperatura'].setValue(
+      this.paciente.historiaClinica!?.temperatura
+    );
+    this.formularioHistoriaClinica.controls['presion'].setValue(
+      this.paciente.historiaClinica!?.presion
+    );
+  }
 }

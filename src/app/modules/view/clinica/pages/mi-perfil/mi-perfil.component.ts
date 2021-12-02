@@ -7,6 +7,7 @@ import {
 } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { AnimateGallery } from 'src/app/animations';
 import { AuthService } from 'src/app/modules/auth/services/auth/auth.service';
 import { UsuarioService } from 'src/app/modules/auth/services/auth/usuarios/usuarios.service';
 import { Administrador } from 'src/app/modules/clases/administrador';
@@ -18,6 +19,7 @@ import { Usuario } from 'src/app/modules/clases/usuario';
   selector: 'app-mi-perfil',
   templateUrl: './mi-perfil.component.html',
   styleUrls: ['./mi-perfil.component.scss'],
+  animations:[AnimateGallery]
 })
 export class MiPerfilComponent implements OnInit {
   vistaCargada: boolean = false;
@@ -25,12 +27,14 @@ export class MiPerfilComponent implements OnInit {
   showMisHorarios: boolean;
   showMiPerfil: boolean;
   showMiHistoriaClinica: boolean = false;
+  showTurnosPaciente: boolean;
   constructor(
     private usuariosService: UsuarioService,
     private authService: AuthService
   ) {
     this.showMisHorarios = false;
     this.showMiPerfil = true;
+    this.showTurnosPaciente = false;
     this.currentUser = {};
     setTimeout(() => {
       this.usuariosService
@@ -105,9 +109,16 @@ export class MiPerfilComponent implements OnInit {
     this.showMisHorarios = false;
     this.showMiPerfil = true;
     this.showMiHistoriaClinica = false;
+    this.showTurnosPaciente = false;
   }
   onShowMiHistoriaClinica() {
     this.showMiPerfil = false;
     this.showMiHistoriaClinica = true;
+    this.showTurnosPaciente = false;
+  }
+  onShowTurnosPaciente() {
+    this.showMiPerfil = false;
+    this.showMiHistoriaClinica = false;
+    this.showTurnosPaciente = true;
   }
 }

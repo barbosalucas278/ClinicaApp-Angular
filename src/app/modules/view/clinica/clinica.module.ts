@@ -20,6 +20,9 @@ import { AltaHistoriaClinicaComponent } from './especialistas/alta-historia-clin
 import { HistoriaClinicaCardComponent } from './especialistas/componentes/historia-clinica-card/historia-clinica-card.component';
 import { MisPacientesComponent } from './especialistas/mis-pacientes/mis-pacientes.component';
 import { TablaPAcientesComponent } from './especialistas/componentes/tabla-pacientes/tabla-pacientes.component';
+import { TurnosPacienteComponent } from './pacientes/componentes/turnos-paciente/turnos-paciente.component';
+import { PacienteCardComponent } from './especialistas/componentes/paciente-card/paciente-card.component';
+import { GrillaPacientesComponent } from './especialistas/componentes/grilla-pacientes/grilla-pacientes.component';
 
 @NgModule({
   declarations: [
@@ -36,12 +39,17 @@ import { TablaPAcientesComponent } from './especialistas/componentes/tabla-pacie
     HistoriaClinicaCardComponent,
     MisPacientesComponent,
     TablaPAcientesComponent,
+    TurnosPacienteComponent,
+    PacienteCardComponent,
+    GrillaPacientesComponent,
   ],
   exports: [
     TablaTurnosComponent,
     AltaTurnoComponent,
     CardTurnoComponent,
     HistoriaClinicaCardComponent,
+    GrillaPacientesComponent,
+    PacienteCardComponent,
   ],
   imports: [
     CommonModule,

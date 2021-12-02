@@ -6,6 +6,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { AuthService } from 'src/app/modules/auth/services/auth/auth.service';
 import { StorageService } from 'src/app/modules/auth/services/storage/storage.service';
 import { Encuesta } from 'src/app/modules/clases/encuesta';
@@ -70,6 +71,7 @@ export class ListaDeTurnosComponent implements OnInit {
               )
             );
           }
+          this.turnosFiltrados.sort(ordenarTurnos);
         }, 1000);
       });
   }
@@ -116,7 +118,6 @@ export class ListaDeTurnosComponent implements OnInit {
     this.resenia.comentario = '';
   }
   onEnviarCalificacion(id_turno: number) {
-
     this.storageService.guardarCalificacionTurno(
       this.id_turnoActivo!,
       this.calificacion
@@ -129,4 +130,14 @@ export class ListaDeTurnosComponent implements OnInit {
     );
   }
   ngOnInit(): void {}
+}
+function ordenarTurnos(a: Turno, b: Turno) {
+  const diaA = moment(`${a.dia} ${a.horario}`, 'DD-MM hh:mm');
+  const diaB = moment(`${b.dia} ${b.horario}`, 'DD-MM hh:mm');
+  let ret = -1;
+  if (diaB.diff(diaA) >= 0) {
+    ret = 1;
+  }
+
+  return ret;
 }

@@ -1,7 +1,9 @@
 <h4 class="text-center">Formulario de Historia Clínica</h4>
 <div class="row justify-content-around">
-  <h4 class="text-left">Ultimo turno tomado con Especialidad: {{ turno.especialidad }}</h4>
-  <h4 class="text-left">Fecha: {{ turno.dia }} {{turno.horario}}</h4>
+  <h4 class="text-left">
+    Ultimo turno tomado con Especialidad: {{ turno.especialidad }}
+  </h4>
+  <h4 class="text-left">Fecha: {{ turno.dia }} {{ turno.horario }}</h4>
   <div class="col-10">
     <form [formGroup]="formularioHistoriaClinica" class="col-12">
       <div class="input-group mb-3">
@@ -94,6 +96,18 @@
       </div>
       <!-- ErrorMessages presion END -->
     </form>
+    <!-- <div class="input-group mb-3">
+      <label class="input-group-text" for="temperatura">Temperatura:</label>
+      <input
+        formControlName="temperatura"
+        type="number"
+        class="form-control form-control-sm"
+        name="temperatura"
+        autocomplete="off"
+        placeholder="C°"
+      />
+    </div> -->
+
     <div class="input-group mb-3">
       <label class="input-group-text" for="extra1">Información N°1:</label>
       <input
@@ -147,7 +161,7 @@
         autocomplete="off"
         placeholder="Observación"
       />
-      <div (click)="onShowExtra3()" *ngIf="!showExtra1 && !showExtra3">
+      <div (click)="onShowExtra3()" *ngIf="showExtra1 && !showExtra3">
         <h1 class="m-0 ms-3 p-0">
           <i class="bi bi-plus-circle-fill text-success"></i>
         </h1>
@@ -187,7 +201,116 @@
         autocomplete="off"
         placeholder="Observación"
       />
-      <div (click)="onCleanExtra3()" *ngIf="showExtra3">
+      <div (click)="onShowExtra4()" *ngIf="showExtra2 && !showExtra4">
+        <h1 class="m-0 ms-3 p-0">
+          <i class="bi bi-plus-circle-fill text-success"></i>
+        </h1>
+      </div>
+      <div (click)="onCleanExtra3()" *ngIf="showExtra3 && !showExtra4">
+        <h1 class="m-0 ms-3 p-0">
+          <i class="bi bi-dash-circle-fill text-danger"></i>
+        </h1>
+      </div>
+    </div>
+    <div class="input-group mb-3 justify-content-end" *ngIf="showExtra4">
+      <label class="input-group-text" for="extra4">Información N°4:</label>
+      <input
+        [(ngModel)]="deta4"
+        type="text"
+        class="form-control form-control-sm"
+        name="deta4"
+        autocomplete="off"
+        placeholder="Detalle"
+      />
+      <div class="input-group mb-3 mt-3">
+        <span class="input-group-text">0</span>
+        <input
+          [(ngModel)]="extra4"
+          type="range"
+          class="form-range form-control col-10 h-100"
+          min="0"
+          max="100"
+          name="extra4"
+          autocomplete="off"
+          placeholder="Observación"
+        />
+        <span class="input-group-text">100</span>
+      </div>
+      <div class="row">
+        <div
+          class="col-5"
+          (click)="onShowExtra5()"
+          *ngIf="showExtra3 && !showExtra5"
+        >
+          <h1 class="m-0 ms-3 p-0">
+            <i class="bi bi-plus-circle-fill text-success"></i>
+          </h1>
+        </div>
+        <div
+          class="col-5"
+          (click)="onCleanExtra4()"
+          *ngIf="showExtra3 && !showExtra5"
+        >
+          <h1 class="m-0 ms-3 p-0">
+            <i class="bi bi-dash-circle-fill text-danger"></i>
+          </h1>
+        </div>
+      </div>
+    </div>
+    <div class="input-group mb-3" *ngIf="showExtra5">
+      <label class="input-group-text" for="extra5">Información N°5:</label>
+      <input
+        [(ngModel)]="deta5"
+        type="text"
+        class="form-control form-control-sm"
+        name="deta5"
+        autocomplete="off"
+        placeholder="Detalle"
+      />
+      <input
+        [(ngModel)]="extra5"
+        type="number"
+        class="form-control form-control-sm"
+        name="extra5"
+        autocomplete="off"
+        placeholder="Observación Numérica"
+      />
+      <div (click)="onShowExtra6()" *ngIf="showExtra4 && !showExtra6">
+        <h1 class="m-0 ms-3 p-0">
+          <i class="bi bi-plus-circle-fill text-success"></i>
+        </h1>
+      </div>
+      <div (click)="onCleanExtra5()" *ngIf="showExtra4 && !showExtra6">
+        <h1 class="m-0 ms-3 p-0">
+          <i class="bi bi-dash-circle-fill text-danger"></i>
+        </h1>
+      </div>
+    </div>
+    <div class="input-group mb-3 justify-content-around" *ngIf="showExtra6">
+      <label class="input-group-text" for="extra6">Información N°6:</label>
+      <input
+        [(ngModel)]="deta6"
+        type="text"
+        class="form-control form-control-sm"
+        name="deta6"
+        autocomplete="off"
+        placeholder="Detalle"
+      />
+      <span class="input-group-text">No</span>
+      <div class="form-check form-switch col-2 ps-5">
+        <input
+          [(ngModel)]="extra6"
+          type="checkbox"
+          role="switch"
+          class="form-check-input h-75 w-100"
+          name="extra6"
+          autocomplete="off"
+          placeholder="Observación"
+        />
+      </div>
+      <span class="input-group-text">Si</span>
+
+      <div (click)="onCleanExtra6()" *ngIf="showExtra6">
         <h1 class="m-0 ms-3 p-0">
           <i class="bi bi-dash-circle-fill text-danger"></i>
         </h1>
@@ -204,6 +327,7 @@
         * La información extra n°1 es requerida.
       </div> -->
     <!-- ErrorMessages extra3 END -->
+
     <button
       type="button"
       class="btn btn-success"
